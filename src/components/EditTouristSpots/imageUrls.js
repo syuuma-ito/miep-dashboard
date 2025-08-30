@@ -28,9 +28,7 @@ export default function ImageUrls({ imageUrls, setImageUrls }) {
                     <p>URL {idx + 1}</p>
                     <div className={style.imageInputRow}>
                         <Input placeholder="画像のURLを入力" value={url} onChange={(e) => updateImage(idx, e.target.value)} />
-                        <Button onClick={() => setPendingDelete(idx)} disabled={imageUrls.length === 1}>
-                            削除
-                        </Button>
+                        <Button onClick={() => setPendingDelete(idx)}>削除</Button>
                     </div>
                 </div>
             ))}
