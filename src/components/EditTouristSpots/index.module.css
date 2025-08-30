@@ -1,0 +1,35 @@
+.container {
+    padding: 16px;
+    max-width: 800px;
+}
+
+.title {
+    font-size: 2rem;
+    margin-bottom: 12px;
+}
+
+.editorContainer {
+    margin-top: 12px;
+}
+
+.inputContainer {
+    margin: 1rem 0;
+    display: flex;
+    align-items: center;
+}
+.inputContainer p {
+    margin-right: 1rem;
+    width: 120px;
+    text-align: right;
+}
+
+.editorContainer h2 {
+    font-size: 1.5rem;
+}
+
+.imageInputRow {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    width: 100%;
+}

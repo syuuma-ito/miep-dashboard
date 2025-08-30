@@ -1,0 +1,25 @@
+.container {
+    padding: 16px;
+    max-width: 800px;
+}
+
+.tag {
+    cursor: pointer;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    row-gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.tagSelectorContainer {
+    margin-left: 120px;
+}
+
+.tagsContainer {
+    margin-bottom: 1rem;
+    min-height: 50px;
+}
