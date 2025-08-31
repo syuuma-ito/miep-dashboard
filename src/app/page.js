@@ -1,5 +1,6 @@
 "use client";
 
+import SpotCard from "@/components/SpotCard";
 import { useAuth } from "@/contexts/AuthContext";
 import { getAllSpotsByLang } from "@/lib/supabase/getAllSpots";
 import Link from "next/link";
@@ -32,11 +33,9 @@ export default function Home({ params }) {
     return (
         <>
             {touristSpots.map((spot) => (
-                <div key={spot.id}>
-                    <h2>{spot.name}</h2>
-                    <p>{spot.description}</p>
-                    <Link href={`/tourist-spots/${spot.id}`}>Edit</Link>
-                </div>
+                <Link key={spot.id} href={`/tourist-spots?id=${spot.id}`}>
+                    <SpotCard spot={spot} />
+                </Link>
             ))}
         </>
     );

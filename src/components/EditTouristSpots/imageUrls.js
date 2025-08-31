@@ -50,7 +50,7 @@ const ImageUrls = ({ images, setImages }) => {
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>画像URLを削除しますか？</AlertDialogTitle>
-                        <AlertDialogDescription>この操作は元に戻せません。URL : {pendingDelete !== null ? imageUrls[pendingDelete] : ""}</AlertDialogDescription>
+                        <AlertDialogDescription>この操作は元に戻せません。URL : {pendingDelete !== null ? images[pendingDelete] : ""}</AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel onClick={() => setPendingDelete(null)}>キャンセル</AlertDialogCancel>
