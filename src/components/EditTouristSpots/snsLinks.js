@@ -9,14 +9,44 @@ import { FaXTwitter } from "react-icons/fa6";
 import { TbWorld } from "react-icons/tb";
 import style from "./index.module.css";
 
+import { memo } from "react";
+
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 
-const platforms = ["website", "x", "instagram", "facebook", "youtube"];
+const platforms = ["website", "x", "instagram", "facebook", "youtube", "twitter"];
 
-export default function SnsLinks({ snsLinks, setSnsLinks }) {
-    const addLink = () => setSnsLinks((prev) => [...prev, { platform: "", url: "" }]);
-    const updateLink = (index, field, value) => setSnsLinks((prev) => prev.map((v, i) => (i === index ? { ...v, [field]: value } : v)));
-    const removeLink = (index) => setSnsLinks((prev) => prev.filter((_, i) => i !== index));
+function listToObject(list) {
+    return list.reduce((acc, item) => {
+        acc[item.platform] = item.url;
+        return acc;
+    }, {});
+}
+
+function objectToList(obj) {
+    return Object.entries(obj).map(([platform, url]) => ({
+        platform,
+        url,
+    }));
+}
+
+const SnsLinks = ({ snsLinks, setSnsLinks }) => {
+    const safeObj = snsLinks || {};
+    const list = objectToList(safeObj);
+
+    const addLink = () => {
+        const newList = [...list, { platform: "", url: "" }];
+        setSnsLinks(listToObject(newList));
+    };
+
+    const updateLink = (index, field, value) => {
+        const newList = list.map((v, i) => (i === index ? { ...v, [field]: value } : v));
+        setSnsLinks(listToObject(newList));
+    };
+
+    const removeLink = (index) => {
+        const newList = list.filter((_, i) => i !== index);
+        setSnsLinks(listToObject(newList));
+    };
 
     const [pendingDelete, setPendingDelete] = useState(null);
     const confirmRemove = () => {
@@ -29,7 +59,7 @@ export default function SnsLinks({ snsLinks, setSnsLinks }) {
     return (
         <div className={style.container}>
             <h2>SNSリンク</h2>
-            {snsLinks.map((item, idx) => (
+            {list.map((item, idx) => (
                 <div className={style.inputContainer} key={idx}>
                     <p>リンク{idx + 1}</p>
                     <div className={style.imageInputRow} style={{ alignItems: "center" }}>
@@ -53,6 +83,7 @@ export default function SnsLinks({ snsLinks, setSnsLinks }) {
                             {item.platform === "instagram" && <FaInstagram />}
                             {item.platform === "facebook" && <FaFacebook />}
                             {item.platform === "youtube" && <FaYoutube />}
+                            {item.platform === "twitter" && <FaXTwitter />}
                             {item.platform === "website" && <TbWorld />}
                         </div>
 
@@ -78,7 +109,7 @@ export default function SnsLinks({ snsLinks, setSnsLinks }) {
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>SNSリンクを削除しますか？</AlertDialogTitle>
-                        <AlertDialogDescription>この操作は元に戻せません。URL : {pendingDelete !== null ? snsLinks[pendingDelete]?.url : ""}</AlertDialogDescription>
+                        <AlertDialogDescription>この操作は元に戻せません。URL : {pendingDelete !== null ? list[pendingDelete]?.url : ""}</AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel onClick={() => setPendingDelete(null)}>キャンセル</AlertDialogCancel>
@@ -88,4 +119,6 @@ export default function SnsLinks({ snsLinks, setSnsLinks }) {
             </AlertDialog>
         </div>
     );
-}
+};
+
+export default memo(SnsLinks);

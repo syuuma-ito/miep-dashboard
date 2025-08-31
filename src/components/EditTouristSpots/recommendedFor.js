@@ -1,7 +1,9 @@
 import { Textarea } from "@/components/ui/textarea";
 import style from "./index.module.css";
 
-export default function RecommendedFor({ recommendedFor_jp, recommendedFor_en, recommendedFor_ko, setRecommendedFor_jp, setRecommendedFor_en, setRecommendedFor_ko }) {
+import { memo } from "react";
+
+const RecommendedFor = ({ recommendedFor_jp, recommendedFor_en, recommendedFor_ko, setRecommendedFor_jp, setRecommendedFor_en, setRecommendedFor_ko }) => {
     return (
         <div className={style.container}>
             <h2>こんな人におすすめ！！</h2>
@@ -19,4 +21,6 @@ export default function RecommendedFor({ recommendedFor_jp, recommendedFor_en, r
             </div>
         </div>
     );
-}
+};
+
+export default memo(RecommendedFor);

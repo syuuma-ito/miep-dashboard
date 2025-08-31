@@ -1,7 +1,9 @@
 import { Input } from "@/components/ui/input";
 import style from "./index.module.css";
 
-export default function TouristSpotsName({ name_ja, name_en, name_ko, setName_ja, setName_en, setName_ko }) {
+import { memo } from "react";
+
+const TouristSpotsName = ({ name_ja, name_en, name_ko, setName_ja, setName_en, setName_ko }) => {
     return (
         <div className={style.container}>
             <h2>観光地名</h2>
@@ -19,4 +21,6 @@ export default function TouristSpotsName({ name_ja, name_en, name_ko, setName_ja
             </div>
         </div>
     );
-}
+};
+
+export default memo(TouristSpotsName);

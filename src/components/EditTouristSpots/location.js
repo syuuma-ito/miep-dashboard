@@ -1,26 +1,22 @@
 import { Input } from "@/components/ui/input";
 import style from "./index.module.css";
 
-export default function Location({ location, setLocation }) {
-    const handleLatChange = (e) => {
-        setLocation({ ...location, latitude: e.target.value });
-    };
+import { memo } from "react";
 
-    const handleLngChange = (e) => {
-        setLocation({ ...location, longitude: e.target.value });
-    };
-
+const Location = ({ latitude, setLatitude, longitude, setLongitude }) => {
     return (
         <div className={style.container}>
             <h2>緯度・経度</h2>
             <div className={style.inputContainer}>
                 <p>緯度</p>
-                <Input type="number" value={location.latitude} onChange={handleLatChange} />
+                <Input type="number" value={latitude} onChange={(e) => setLatitude(e.target.value)} />
             </div>
             <div className={style.inputContainer}>
                 <p>経度</p>
-                <Input type="number" value={location.longitude} onChange={handleLngChange} />
+                <Input type="number" value={longitude} onChange={(e) => setLongitude(e.target.value)} />
             </div>
         </div>
     );
-}
+};
+
+export default memo(Location);

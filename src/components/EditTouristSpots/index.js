@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
 import Description from "./description";
 import IconUrl from "./iconUrl";
 import ImageUrls from "./imageUrls";
@@ -13,128 +14,92 @@ import SnsLinks from "./snsLinks";
 import TagSelector from "./tagSelector";
 import TouristSpotsName from "./touristSpotsName";
 
-const allTags = [
-    {
-        name: "タグ1",
-        color: "#ff0000",
-        id: 1,
-    },
-    {
-        name: "タグ2",
-        color: "#00ff00",
-        id: 2,
-    },
-    {
-        name: "タグ3",
-        color: "#0000ff",
-        id: 3,
-    },
-];
-
-const allTouristSpots = [
-    { id: 1, name: "観光地A" },
-    { id: 2, name: "観光地B" },
-    { id: 3, name: "観光地C" },
-];
-
-const data = {
-    name: {
-        ja: "",
-        en: "",
-        ko: "",
-    },
-    icon: "",
-    images: [],
-    tags: ["id", "id2"],
-    latitude: 0,
-    longitude: 0,
-    description: {
-        ja: "",
-        en: "",
-        ko: "",
-    },
-    recommended_for: {
-        ja: "",
-        en: "",
-        ko: "",
-    },
-    info: [
-        {
-            key: {
-                ja: "",
-                en: "",
-                ko: "",
-            },
-            value: {
-                ja: "",
-                en: "",
-                ko: "",
-            },
-        },
-        {
-            key: {
-                ja: "",
-                en: "",
-                ko: "",
-            },
-            value: {
-                ja: "",
-                en: "",
-                ko: "",
-            },
-        },
-    ],
-    nearby_recommendations: ["id", "id2"],
-    sns_links: [
-        {
-            platform: "",
-            url: "",
-        },
-        {
-            platform: "",
-            url: "",
-        },
-    ],
-};
-
-export default function EditTouristSpots() {
+export default function EditTouristSpots({ touristSpot, onSave, onPreview }) {
     const [name_ja, setName_ja] = useState("");
     const [name_en, setName_en] = useState("");
     const [name_ko, setName_ko] = useState("");
-
     const [iconUrl, setIconUrl] = useState("");
-
-    const [imageUrls, setImageUrls] = useState([]);
-
-    const [selectedTags, setSelectedTags] = useState([]);
-
-    const [location, setLocation] = useState({ latitude: 34.7303, longitude: 136.5086 });
-
+    const [images, setImages] = useState([]);
+    const [latitude, setLatitude] = useState(0);
+    const [longitude, setLongitude] = useState(0);
+    const [tags, setTags] = useState([]);
     const [description_ja, setDescription_ja] = useState("");
     const [description_en, setDescription_en] = useState("");
     const [description_ko, setDescription_ko] = useState("");
-
     const [recommendedFor_jp, setRecommendedFor_jp] = useState("");
     const [recommendedFor_en, setRecommendedFor_en] = useState("");
     const [recommendedFor_ko, setRecommendedFor_ko] = useState("");
-
     const [info, setInfo] = useState([]);
-
     const [nearbyRecommendations, setNearbyRecommendations] = useState([]);
+    const [snsLinks, setSnsLinks] = useState({});
 
-    const [snsLinks, setSnsLinks] = useState([]);
+    useEffect(() => {
+        if (touristSpot && Object.keys(touristSpot).length > 0) {
+            setName_ja(touristSpot.name.ja);
+            setName_en(touristSpot.name.en);
+            setName_ko(touristSpot.name.ko);
+            setIconUrl(touristSpot.icon);
+            setImages(touristSpot.images);
+            setLatitude(touristSpot.latitude);
+            setLongitude(touristSpot.longitude);
+            setTags(touristSpot.tags);
+            setDescription_ja(touristSpot.description_ja);
+            setDescription_en(touristSpot.description_en);
+            setDescription_ko(touristSpot.description_ko);
+            setRecommendedFor_jp(touristSpot.recommendedFor_jp);
+            setRecommendedFor_en(touristSpot.recommendedFor_en);
+            setRecommendedFor_ko(touristSpot.recommendedFor_ko);
+            setInfo(touristSpot.info);
+            setNearbyRecommendations(touristSpot.nearby_recommendations);
+            setSnsLinks(touristSpot.sns_links);
+        }
+    }, [touristSpot]);
+
+    const data = {
+        name: {
+            ja: name_ja,
+            en: name_en,
+            ko: name_ko,
+        },
+        icon: iconUrl,
+        images: images,
+        latitude: latitude,
+        longitude: longitude,
+        tags: tags,
+        description: {
+            ja: description_ja,
+            en: description_en,
+            ko: description_ko,
+        },
+        recommendedFor: {
+            ja: recommendedFor_jp,
+            en: recommendedFor_en,
+            ko: recommendedFor_ko,
+        },
+        info: info,
+        nearby_recommendations: nearbyRecommendations,
+        sns_links: snsLinks,
+    };
 
     return (
-        <div className={style.container}>
-            <h1 className={style.title}>観光地の編集</h1>
+        <div className={style.main}>
+            <div className={style.header}>
+                <h1 className={style.title}>{name_ja || "観光地の編集"}</h1>
+                <div className={style.buttonContainer}>
+                    <Button onClick={() => onSave(data)}>保存</Button>
+                    <Button variant="outline" onClick={() => onPreview(data)}>
+                        プレビュー
+                    </Button>
+                </div>
+            </div>
             <div className={style.editorContainer}>
                 <TouristSpotsName name_ja={name_ja} name_en={name_en} name_ko={name_ko} setName_ja={setName_ja} setName_en={setName_en} setName_ko={setName_ko} />
                 <IconUrl iconUrl={iconUrl} setIconUrl={setIconUrl} />
-                <ImageUrls imageUrls={imageUrls} setImageUrls={setImageUrls} />
+                <ImageUrls images={images} setImages={setImages} />
 
-                <Location location={location} setLocation={setLocation} />
+                <Location latitude={latitude} setLatitude={setLatitude} longitude={longitude} setLongitude={setLongitude} />
 
-                <TagSelector selectedTags={selectedTags} setSelectedTags={setSelectedTags} allTags={allTags} />
+                <TagSelector selectedTags={tags} setSelectedTags={setTags} />
 
                 <Description
                     description_ja={description_ja}
@@ -156,7 +121,7 @@ export default function EditTouristSpots() {
 
                 <Info info={info} setInfo={setInfo} />
 
-                <NearbyRecommendations nearbyRecommendations={nearbyRecommendations} setNearbyRecommendations={setNearbyRecommendations} allTouristSpots={allTouristSpots} />
+                <NearbyRecommendations nearbyRecommendations={nearbyRecommendations} setNearbyRecommendations={setNearbyRecommendations} />
 
                 <SnsLinks snsLinks={snsLinks} setSnsLinks={setSnsLinks} />
             </div>

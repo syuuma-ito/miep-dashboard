@@ -1,7 +1,8 @@
 import { Input } from "@/components/ui/input";
+import { memo } from "react";
 import style from "./index.module.css";
 
-export default function IconUrl({ iconUrl, setIconUrl }) {
+const IconUrl = ({ iconUrl, setIconUrl }) => {
     return (
         <div className={style.container}>
             <h2>アイコン</h2>
@@ -11,4 +12,6 @@ export default function IconUrl({ iconUrl, setIconUrl }) {
             </div>
         </div>
     );
-}
+};
+
+export default memo(IconUrl);

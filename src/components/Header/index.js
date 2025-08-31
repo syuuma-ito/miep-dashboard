@@ -3,20 +3,23 @@
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { FiUser } from "react-icons/fi";
 import { toast } from "sonner";
 
-export function Header() {
+export function Header({ className }) {
     const { user, supabase } = useAuth();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
+    const router = useRouter();
 
     const handleLogout = async () => {
         try {
             await supabase.auth.signOut();
             toast.success("ログアウトしました");
             setIsDropdownOpen(false);
+            router.push("/login");
         } catch (error) {
             toast.error("ログアウトに失敗しました");
         }
@@ -36,7 +39,7 @@ export function Header() {
     }, []);
 
     return (
-        <header className="border-b border-gray-200">
+        <header className={`border-b border-gray-200 ${className}`}>
             <div className="container mx-auto px-4 py-4">
                 <div className="flex items-center justify-between">
                     <Link href="/" className="text-2xl flex items-center">

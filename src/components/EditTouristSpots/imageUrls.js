@@ -7,10 +7,12 @@ import style from "./index.module.css";
 
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 
-export default function ImageUrls({ imageUrls, setImageUrls }) {
-    const addImage = () => setImageUrls((prev) => [...prev, ""]);
-    const updateImage = (index, value) => setImageUrls((prev) => prev.map((v, i) => (i === index ? value : v)));
-    const removeImage = (index) => setImageUrls((prev) => prev.filter((_, i) => i !== index));
+import { memo } from "react";
+
+const ImageUrls = ({ images, setImages }) => {
+    const addImage = () => setImages((prev) => [...prev, ""]);
+    const updateImage = (index, value) => setImages((prev) => prev.map((v, i) => (i === index ? value : v)));
+    const removeImage = (index) => setImages((prev) => prev.filter((_, i) => i !== index));
 
     const [pendingDelete, setPendingDelete] = useState(null);
     const confirmRemove = () => {
@@ -23,7 +25,7 @@ export default function ImageUrls({ imageUrls, setImageUrls }) {
     return (
         <div className={style.container}>
             <h2>画像</h2>
-            {imageUrls.map((url, idx) => (
+            {images.map((url, idx) => (
                 <div className={style.inputContainer} key={idx}>
                     <p>URL {idx + 1}</p>
                     <div className={style.imageInputRow}>
@@ -58,4 +60,6 @@ export default function ImageUrls({ imageUrls, setImageUrls }) {
             </AlertDialog>
         </div>
     );
-}
+};
+
+export default memo(ImageUrls);

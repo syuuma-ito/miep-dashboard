@@ -7,7 +7,9 @@ import style from "./index.module.css";
 
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 
-export default function Info({ info, setInfo }) {
+import { memo } from "react";
+
+const Info = ({ info, setInfo }) => {
     const addInfo = () => setInfo((prev) => [...prev, { key: { ja: "", en: "", ko: "" }, value: { ja: "", en: "", ko: "" } }]);
 
     const updateInfo = (idx, path, value) => {
@@ -101,4 +103,6 @@ export default function Info({ info, setInfo }) {
             </AlertDialog>
         </div>
     );
-}
+};
+
+export default memo(Info);

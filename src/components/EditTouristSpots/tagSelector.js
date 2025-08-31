@@ -1,12 +1,28 @@
+"use client";
+
 import Tag from "@/components/Tag";
+import { getAllTagsByLang } from "@/lib/supabase/getAllTags";
+import { useEffect, useState } from "react";
 import style from "./tagSelector.module.css";
 
-export default function TagSelector({ selectedTags, setSelectedTags, allTags }) {
+import { memo } from "react";
+
+const TagSelector = ({ selectedTags, setSelectedTags }) => {
+    const [allTags, setAllTags] = useState([]);
+
+    useEffect(() => {
+        const fetchTags = async () => {
+            const tags = await getAllTagsByLang("ja");
+            setAllTags(tags);
+        };
+        fetchTags();
+    }, []);
+
     const toggleTag = (tag) => {
-        setSelectedTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]));
+        setSelectedTags((prev) => (prev.includes(tag.id) ? prev.filter((id) => id !== tag.id) : [...prev, tag.id]));
     };
 
-    const availableTags = allTags.filter((tag) => !selectedTags.some((selectedTag) => selectedTag.id === tag.id));
+    const availableTags = allTags.filter((tag) => !selectedTags.includes(tag.id));
 
     const tagElements = (tags) => (
         <div className={style.tags}>
@@ -18,13 +34,15 @@ export default function TagSelector({ selectedTags, setSelectedTags, allTags }) 
         </div>
     );
 
+    const displaySelectedTags = allTags.filter((tag) => selectedTags.includes(tag.id));
+
     return (
         <div className={style.container}>
             <h2>タグ</h2>
             <div className={style.tagSelectorContainer}>
                 <div className={style.tagsContainer}>
                     <p>選択されたタグ</p>
-                    {tagElements(selectedTags)}
+                    {tagElements(displaySelectedTags)}
                 </div>
                 <div className={style.tagsContainer}>
                     <p>すべてのタグ</p>
@@ -33,4 +51,6 @@ export default function TagSelector({ selectedTags, setSelectedTags, allTags }) 
             </div>
         </div>
     );
-}
+};
+
+export default memo(TagSelector);

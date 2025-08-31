@@ -1,7 +1,8 @@
 import { Textarea } from "@/components/ui/textarea";
+import { memo } from "react";
 import style from "./index.module.css";
 
-export default function Description({ description_ja, description_en, description_ko, setDescription_ja, setDescription_en, setDescription_ko }) {
+const Description = ({ description_ja, description_en, description_ko, setDescription_ja, setDescription_en, setDescription_ko }) => {
     return (
         <div className={style.container}>
             <h2>説明文</h2>
@@ -19,4 +20,6 @@ export default function Description({ description_ja, description_en, descriptio
             </div>
         </div>
     );
-}
+};
+
+export default memo(Description);

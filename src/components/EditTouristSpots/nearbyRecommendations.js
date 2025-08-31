@@ -1,18 +1,30 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { useState } from "react";
+import { getAllSpotsByLang } from "@/lib/supabase/getAllSpots";
+import { useEffect, useState } from "react";
 import style from "./index.module.css";
 
-export default function NearbyRecommendations({ nearbyRecommendations, setNearbyRecommendations, allTouristSpots }) {
+import { memo } from "react";
+
+const NearbyRecommendations = ({ nearbyRecommendations, setNearbyRecommendations }) => {
     const [openIndex, setOpenIndex] = useState(null);
+    const [allTouristSpots, setAllTouristSpots] = useState([]);
+
+    useEffect(() => {
+        const fetchAllSpots = async () => {
+            const spots = await getAllSpotsByLang("ja");
+            setAllTouristSpots(spots);
+        };
+        fetchAllSpots();
+    }, []);
 
     const addRecommendation = () => setNearbyRecommendations((prev) => [...prev, null]);
 
     const updateRecommendation = (index, value) => {
-        const id = Number(value);
+        const id = value == null || value === "" ? null : String(value);
         setNearbyRecommendations((prev) => prev.map((v, i) => (i === index ? id : v)));
     };
 
@@ -37,7 +49,7 @@ export default function NearbyRecommendations({ nearbyRecommendations, setNearby
                                 </PopoverTrigger>
                                 <PopoverContent className="p-0" side="right" align="start">
                                     <Command>
-                                        <CommandInput placeholder="観光地を検索..." />
+                                        {/* <CommandInput placeholder="観光地を検索..." /> */}
                                         <CommandList>
                                             <CommandEmpty>No results found.</CommandEmpty>
                                             <CommandGroup>
@@ -73,4 +85,6 @@ export default function NearbyRecommendations({ nearbyRecommendations, setNearby
             </div>
         </div>
     );
-}
+};
+
+export default memo(NearbyRecommendations);

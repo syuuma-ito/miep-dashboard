@@ -85,6 +85,8 @@
     }
 }
 
+html,
 body {
-    font-family: var(--font-zen-kaku-gothic);
+    height: 100%;
+    margin: 0;
 }
