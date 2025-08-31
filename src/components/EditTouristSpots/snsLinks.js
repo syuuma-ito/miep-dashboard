@@ -42,7 +42,6 @@ const SnsLinks = ({ control, register, errors, name = "sns_links" }) => {
                 return (
                     <div className={style.inputContainer} key={field.id}>
                         <div className={style.inputWithLabel}>
-                            <label>リンク{index + 1}</label>
                             <div style={{ width: "8rem" }}>
                                 <Controller
                                     control={control}

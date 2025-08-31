@@ -18,7 +18,7 @@ import TagSelector from "./tagSelector";
 
 import { placeSchema } from "@/lib/placeSchema";
 
-export default function EditTouristSpots({ touristSpot, onSave, onPreview, title }) {
+export default function EditTouristSpots({ touristSpot, onSave, onPreview, onDelete, isEdit }) {
     const {
         register,
         control,
@@ -61,9 +61,14 @@ export default function EditTouristSpots({ touristSpot, onSave, onPreview, title
     return (
         <div className={style.main}>
             <div className={style.header}>
-                <h1 className={style.title}>{title}</h1>
+                <h1 className={style.title}>{isEdit ? "編集" : "新規作成"}</h1>
                 <div className={style.buttonContainer}>
-                    <Button onClick={saveHandler}>保存</Button>
+                    <Button onClick={saveHandler}>{isEdit ? "保存" : "作成"}</Button>
+                    {isEdit && (
+                        <Button variant="destructive" onClick={onDelete}>
+                            削除
+                        </Button>
+                    )}
                     <Button variant="outline" onClick={previewHandler}>
                         プレビュー
                     </Button>

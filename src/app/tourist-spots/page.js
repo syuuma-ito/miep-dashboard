@@ -4,6 +4,7 @@ import EditTouristSpots from "@/components/EditTouristSpots";
 import LangSelect from "@/components/LangSelect/LangSelect";
 import MapPreview from "@/components/Map";
 import SpotDetail from "@/components/SpotDetail";
+import { Button } from "@/components/ui/button";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { useAuth } from "@/contexts/AuthContext";
 import { getAllSpotsByLang } from "@/lib/supabase/getAllSpots";
@@ -38,6 +39,7 @@ export default function Page() {
 
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [pendingSaveData, setPendingSaveData] = useState(null);
+    const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
 
     useEffect(() => {
         const fetchAllSpots = async () => {
@@ -102,6 +104,25 @@ export default function Page() {
         }
     }, [pendingSaveData, supabase]);
 
+    // Open confirmation dialog for delete
+    const handleDelete = useCallback(() => {
+        setDeleteConfirmOpen(true);
+    }, []);
+
+    // Perform actual delete after confirmation
+    const performDelete = useCallback(async () => {
+        setDeleteConfirmOpen(false);
+        if (!id || !supabase) return;
+        const { error } = await supabase.rpc("delete_spot_by_id", { p_spot_id: id });
+
+        if (error) {
+            toast.error("削除に失敗しました");
+        } else {
+            toast.success("削除しました");
+            router.push("/");
+        }
+    }, [id, supabase, router]);
+
     const handlePreview = useCallback((data) => {
         toast.info("プレビューを更新しました");
         setPreviewData(data);
@@ -125,7 +146,7 @@ export default function Page() {
         <>
             <ResizablePanelGroup direction="horizontal" className={style.container}>
                 <ResizablePanel defaultSize={30} className="flex-1 h-full ">
-                    <EditTouristSpots touristSpot={touristSpot} onSave={handleSave} onPreview={handlePreview} title="編集" />
+                    <EditTouristSpots touristSpot={touristSpot} onSave={handleSave} onPreview={handlePreview} onDelete={handleDelete} isEdit />
                 </ResizablePanel>
                 <ResizableHandle withHandle />
                 <ResizablePanel defaultSize={70}>
@@ -154,6 +175,20 @@ export default function Page() {
                     <AlertDialogFooter>
                         <AlertDialogCancel>キャンセル</AlertDialogCancel>
                         <AlertDialogAction onClick={performSave}>保存</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+            <AlertDialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>本当に削除しますか？</AlertDialogTitle>
+                        <AlertDialogDescription>削除すると元に戻せません。</AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>キャンセル</AlertDialogCancel>
+                        <Button variant="destructive" onClick={performDelete}>
+                            削除
+                        </Button>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
