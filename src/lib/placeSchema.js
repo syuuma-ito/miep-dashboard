@@ -16,36 +16,63 @@ const createMultilingualSchema = (fieldName) =>
 
 // info配列内の各オブジェクトのスキーマ
 const infoItemSchema = z.object({
-    key: createMultilingualSchema("キー"),
-    value: createMultilingualSchema("値"),
+    key: createMultilingualSchema("ラベル"),
+    value: createMultilingualSchema("内容"),
     display_order: z.number({
         required_error: requiredError("表示順"),
         invalid_type_error: invalidTypeError("表示順", "数値"),
     }),
 });
 
-// SNSリンクのスキーマ
-const snsLinksSchema = z.object({
-    website: z.url({ message: invalidFormatError("ウェブサイト", "URL") }).optional(),
-    x: z.url({ message: invalidFormatError("X (旧Twitter)", "URL") }).optional(),
-    instagram: z.url({ message: invalidFormatError("Instagram", "URL") }).optional(),
-    facebook: z.url({ message: invalidFormatError("Facebook", "URL") }).optional(),
-    youtube: z.url({ message: invalidFormatError("YouTube", "URL") }).optional(),
-    twitter: z.url({ message: invalidFormatError("Twitter", "URL") }).optional(),
-});
+// SNSリンクのスキーマ（配列形式: { platform, url } の配列）
+const snsLinksSchema = z
+    .array(
+        z.object({
+            platform: z.enum(["website", "x", "instagram", "facebook", "youtube", "twitter"]),
+            url: z.url({ message: invalidFormatError("SNSリンク", "URL") }),
+        })
+    )
+    .optional();
 
 export const placeSchema = z.object({
-    id: z.uuid({ message: invalidFormatError("ID", "UUID") }),
+    id: z.uuid({
+        message: invalidFormatError("ID", "UUID"),
+    }),
     name: createMultilingualSchema("観光地名"),
-    icon: z.url({ message: invalidFormatError("アイコンURL", "URL") }),
-    images: z.array(z.url({ message: invalidFormatError("画像URL", "URL") })).min(1, { message: minLengthError("画像", 1) }),
-    latitude: z.number({ required_error: requiredError("緯度"), invalid_type_error: invalidTypeError("緯度", "数値") }),
-    longitude: z.number({ required_error: requiredError("経度"), invalid_type_error: invalidTypeError("経度", "数値") }),
+    icon: z.url({
+        message: invalidFormatError("アイコンURL", "URL"),
+    }),
+    images: z
+        .array(
+            z.url({
+                message: invalidFormatError("画像URL", "URL"),
+            })
+        )
+        .min(1, { message: minLengthError("画像", 1) }),
+    latitude: z.coerce.number({
+        required_error: requiredError("緯度"),
+        invalid_type_error: invalidTypeError("緯度", "数値"),
+    }),
+    longitude: z.coerce.number({
+        required_error: requiredError("経度"),
+        invalid_type_error: invalidTypeError("経度", "数値"),
+    }),
     description: createMultilingualSchema("詳細"),
     recommended_for: createMultilingualSchema("こんな人におすすめ！！"),
-
-    tags: z.array(z.uuid({ message: invalidFormatError("タグID", "UUID") })).optional(),
+    tags: z
+        .array(
+            z.uuid({
+                message: invalidFormatError("タグID", "UUID"),
+            })
+        )
+        .optional(),
     info: z.array(infoItemSchema).optional(),
-    nearby_recommendations: z.array(z.uuid({ message: invalidFormatError("近くのおすすめスポット", "UUID") })).optional(),
+    nearby_recommendations: z
+        .array(
+            z.uuid({
+                message: invalidFormatError("近くのおすすめスポット", "UUID"),
+            })
+        )
+        .optional(),
     sns_links: snsLinksSchema.optional(),
 });

@@ -1,22 +1,28 @@
 import { Input } from "@/components/ui/input";
-import style from "./index.module.css";
+import style from "./forms.module.css";
 
-import { memo } from "react";
+import ErrorMessage from "./error";
 
-const Location = ({ latitude, setLatitude, longitude, setLongitude }) => {
+const Location = ({ register, errors }) => {
     return (
-        <div className={style.container}>
+        <div className={style.section}>
             <h2>緯度・経度</h2>
             <div className={style.inputContainer}>
-                <p>緯度</p>
-                <Input type="number" value={latitude} onChange={(e) => setLatitude(e.target.value)} />
+                <div className={style.inputWithLabel}>
+                    <label>緯度</label>
+                    <Input type="number" {...register("latitude")} />
+                </div>
+                <ErrorMessage message={errors.latitude?.message} className={style.errorMessage} />
             </div>
             <div className={style.inputContainer}>
-                <p>経度</p>
-                <Input type="number" value={longitude} onChange={(e) => setLongitude(e.target.value)} />
+                <div className={style.inputWithLabel}>
+                    <label>経度</label>
+                    <Input type="number" {...register("longitude")} />
+                </div>
+                <ErrorMessage message={errors.longitude?.message} className={style.errorMessage} />
             </div>
         </div>
     );
 };
 
-export default memo(Location);
+export default Location;

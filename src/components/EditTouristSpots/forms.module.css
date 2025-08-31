@@ -1,0 +1,35 @@
+.section {
+    margin: 2rem 0;
+}
+
+.inputContainer {
+    margin: 1rem 0;
+}
+.inputWithLabel {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 1rem 0 0;
+}
+
+.inputWithLabel label {
+    margin-right: 1rem;
+    width: 80px;
+    text-align: right;
+}
+
+.errorMessage {
+    margin-left: 80px;
+}
+
+.addButton {
+    margin-top: 1rem;
+    margin-left: 80px;
+}
+
+.inputHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 1rem;
+}

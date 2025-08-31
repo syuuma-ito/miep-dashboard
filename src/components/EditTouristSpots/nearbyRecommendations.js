@@ -5,13 +5,21 @@ import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { getAllSpotsByLang } from "@/lib/supabase/getAllSpots";
 import { useEffect, useState } from "react";
-import style from "./index.module.css";
+import { Controller, useFieldArray, useWatch } from "react-hook-form";
+import style from "./forms.module.css";
 
-import { memo } from "react";
+import ErrorMessage from "./error";
 
-const NearbyRecommendations = ({ nearbyRecommendations, setNearbyRecommendations }) => {
+const NearbyRecommendations = ({ control, errors, name = "nearby_recommendations" }) => {
     const [openIndex, setOpenIndex] = useState(null);
     const [allTouristSpots, setAllTouristSpots] = useState([]);
+
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name,
+    });
+
+    const currentValues = useWatch({ control, name }) || [];
 
     useEffect(() => {
         const fetchAllSpots = async () => {
@@ -21,70 +29,77 @@ const NearbyRecommendations = ({ nearbyRecommendations, setNearbyRecommendations
         fetchAllSpots();
     }, []);
 
-    const addRecommendation = () => setNearbyRecommendations((prev) => [...prev, null]);
-
-    const updateRecommendation = (index, value) => {
-        const id = value == null || value === "" ? null : String(value);
-        setNearbyRecommendations((prev) => prev.map((v, i) => (i === index ? id : v)));
+    const addRecommendation = () => {
+        append(null);
     };
 
-    const removeRecommendation = (index) => setNearbyRecommendations((prev) => prev.filter((_, i) => i !== index));
-
     return (
-        <div className={style.container}>
+        <div className={style.section}>
             <h2>近くのおすすめスポット</h2>
 
-            {nearbyRecommendations.map((spotId, idx) => {
-                const selected = allTouristSpots.find((s) => s.id === spotId) || null;
-                const availableSpots = allTouristSpots.filter((s) => !nearbyRecommendations.some((id, i) => id === s.id && i !== idx));
-                return (
-                    <div className={style.inputContainer} key={idx}>
-                        <p>スポット {idx + 1}</p>
-                        <div className={style.imageInputRow}>
-                            <Popover open={openIndex === idx} onOpenChange={(open) => setOpenIndex(open ? idx : null)}>
-                                <PopoverTrigger asChild>
-                                    <Button variant="outline" className="w-[240px] justify-start">
-                                        {selected ? selected.name : "+ 観光地を選択"}
-                                    </Button>
-                                </PopoverTrigger>
-                                <PopoverContent className="p-0" side="right" align="start">
-                                    <Command>
-                                        {/* <CommandInput placeholder="観光地を検索..." /> */}
-                                        <CommandList>
-                                            <CommandEmpty>No results found.</CommandEmpty>
-                                            <CommandGroup>
-                                                {availableSpots.map((spot) => (
-                                                    <CommandItem
-                                                        key={spot.id}
-                                                        value={String(spot.id)}
-                                                        onSelect={(value) => {
-                                                            updateRecommendation(idx, value);
-                                                            setOpenIndex(null);
-                                                        }}
-                                                    >
-                                                        {spot.name}
-                                                    </CommandItem>
-                                                ))}
-                                            </CommandGroup>
-                                        </CommandList>
-                                    </Command>
-                                </PopoverContent>
-                            </Popover>
+            {fields.map((field, index) => {
+                const availableSpots = allTouristSpots.filter((spot) => !currentValues.includes(spot.id) || currentValues[index] === spot.id);
 
-                            <Button onClick={() => removeRecommendation(idx)}>削除</Button>
+                return (
+                    <div className={style.inputContainer} key={field.id}>
+                        <div className={style.inputWithLabel}>
+                            <label>スポット {index + 1}</label>
+
+                            <Controller
+                                control={control}
+                                name={`${name}.${index}`}
+                                render={({ field: controllerField }) => {
+                                    const selectedSpot = allTouristSpots.find((s) => s.id === controllerField.value);
+                                    return (
+                                        <Popover open={openIndex === index} onOpenChange={(open) => setOpenIndex(open ? index : null)}>
+                                            <PopoverTrigger asChild>
+                                                <Button type="button" variant="outline" className="w-[240px] justify-start">
+                                                    {selectedSpot ? selectedSpot.name : "+ 観光地を選択"}
+                                                </Button>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="p-0" side="right" align="start">
+                                                <Command>
+                                                    <CommandList>
+                                                        <CommandEmpty>No results found.</CommandEmpty>
+                                                        <CommandGroup>
+                                                            {availableSpots.map((spot) => (
+                                                                <CommandItem
+                                                                    key={spot.id}
+                                                                    value={spot.id}
+                                                                    onSelect={(currentValue) => {
+                                                                        controllerField.onChange(currentValue);
+                                                                        setOpenIndex(null);
+                                                                    }}
+                                                                >
+                                                                    {spot.name}
+                                                                </CommandItem>
+                                                            ))}
+                                                        </CommandGroup>
+                                                    </CommandList>
+                                                </Command>
+                                            </PopoverContent>
+                                        </Popover>
+                                    );
+                                }}
+                            />
+
+                            <Button type="button" onClick={() => remove(index)} variant="destructive">
+                                削除
+                            </Button>
                         </div>
+                        <ErrorMessage message={errors?.[name]?.[index]?.message} />
                     </div>
                 );
             })}
 
-            <div className={style.inputContainer}>
-                <p />
-                <div>
-                    <Button onClick={addRecommendation}>観光地を追加</Button>
-                </div>
+            <div className={style.addButton}>
+                <Button type="button" onClick={addRecommendation}>
+                    観光地を追加
+                </Button>
             </div>
+            <ErrorMessage message={errors?.[name]?.root?.message || errors?.[name]?.message} />
         </div>
     );
 };
 
-export default memo(NearbyRecommendations);
+export default NearbyRecommendations;

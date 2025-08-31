@@ -9,12 +9,11 @@ import { useAuth } from "@/contexts/AuthContext";
 import { getAllSpotsByLang } from "@/lib/supabase/getAllSpots";
 import { getAllTagsByLang } from "@/lib/supabase/getAllTags";
 import { filterTextByLang, resolveSpotRefs } from "@/utils/spot";
-import { validateSpot } from "@/utils/validation";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
-import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useSearchParams } from "next/navigation";
 
 import style from "./page.module.css";
@@ -37,8 +36,8 @@ export default function Page() {
     const [isError, setIsError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
-    const [openDialog, setOpenDialog] = useState(false);
-    const [dialogData, setDialogData] = useState(null);
+    const [confirmOpen, setConfirmOpen] = useState(false);
+    const [pendingSaveData, setPendingSaveData] = useState(null);
 
     useEffect(() => {
         const fetchAllSpots = async () => {
@@ -79,28 +78,32 @@ export default function Page() {
     }, [supabase, id]);
 
     const handleSave = useCallback(
-        async (data) => {
+        (data) => {
             data.id = id;
-            console.log("Saving data:", data);
-
-            const { valid, errors } = validateSpot(data);
-
-            console.log("Validation result:", valid, errors);
-
-            return;
-
-            const { error } = await supabase.rpc("upsert_spot", { p_data: data });
-
-            if (error) {
-                toast.error("保存に失敗しました");
-            } else {
-                toast.success("保存しました");
-            }
+            setPendingSaveData(data);
+            setConfirmOpen(true);
         },
-        [id, supabase]
+        [id]
     );
 
+    const performSave = useCallback(async () => {
+        if (!pendingSaveData) return;
+        setConfirmOpen(false);
+        const data = pendingSaveData;
+        setPendingSaveData(null);
+
+        console.log("Saving data:", data);
+        const { error } = await supabase.rpc("upsert_spot", { p_data: data });
+
+        if (error) {
+            toast.error("保存に失敗しました");
+        } else {
+            toast.success("保存しました");
+        }
+    }, [pendingSaveData, supabase]);
+
     const handlePreview = useCallback((data) => {
+        toast.info("プレビューを更新しました");
         setPreviewData(data);
     }, []);
 
@@ -144,14 +147,15 @@ export default function Page() {
                     </div>
                 </ResizablePanel>
             </ResizablePanelGroup>
-            <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
+            <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>{dialogData?.title}</AlertDialogTitle>
-                        <AlertDialogDescription>{dialogData?.description}</AlertDialogDescription>
+                        <AlertDialogTitle>変更を保存してもいいですか？</AlertDialogTitle>
+                        <AlertDialogDescription>保存されるとすぐに反映されます。</AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel>閉じる</AlertDialogCancel>
+                        <AlertDialogCancel>キャンセル</AlertDialogCancel>
+                        <AlertDialogAction onClick={performSave}>保存</AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>

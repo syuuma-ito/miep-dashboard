@@ -2,13 +2,20 @@
 
 import Tag from "@/components/Tag";
 import { getAllTagsByLang } from "@/lib/supabase/getAllTags";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
+import { useController } from "react-hook-form";
 import style from "./tagSelector.module.css";
 
-import { memo } from "react";
+import ErrorMessage from "./error";
 
-const TagSelector = ({ selectedTags, setSelectedTags }) => {
+const TagSelector = ({ control, name, errors }) => {
     const [allTags, setAllTags] = useState([]);
+
+    const { field } = useController({
+        name,
+        control,
+        defaultValue: [],
+    });
 
     useEffect(() => {
         const fetchTags = async () => {
@@ -18,26 +25,29 @@ const TagSelector = ({ selectedTags, setSelectedTags }) => {
         fetchTags();
     }, []);
 
-    const toggleTag = (tag) => {
-        setSelectedTags((prev) => (prev.includes(tag.id) ? prev.filter((id) => id !== tag.id) : [...prev, tag.id]));
+    const toggleTag = (tagId) => {
+        const currentTags = field.value || [];
+        const updatedTags = currentTags.includes(tagId) ? currentTags.filter((id) => id !== tagId) : [...currentTags, tagId];
+        field.onChange(updatedTags);
     };
 
-    const availableTags = allTags.filter((tag) => !selectedTags.includes(tag.id));
+    const availableTags = allTags.filter((tag) => !field.value.includes(tag.id));
+    const displaySelectedTags = allTags.filter((tag) => field.value.includes(tag.id));
 
     const tagElements = (tags) => (
         <div className={style.tags}>
             {tags.map((tag) => (
-                <div key={tag.id} onClick={() => toggleTag(tag)} className={style.tag}>
+                <div key={tag.id} onClick={() => toggleTag(tag.id)} className={style.tag}>
                     <Tag name={tag.name} color={tag.color} />
                 </div>
             ))}
         </div>
     );
 
-    const displaySelectedTags = allTags.filter((tag) => selectedTags.includes(tag.id));
+    const error = errors?.[name];
 
     return (
-        <div className={style.container}>
+        <div className={style.section}>
             <h2>タグ</h2>
             <div className={style.tagSelectorContainer}>
                 <div className={style.tagsContainer}>
@@ -49,6 +59,7 @@ const TagSelector = ({ selectedTags, setSelectedTags }) => {
                     {tagElements(availableTags)}
                 </div>
             </div>
+            <ErrorMessage message={error?.message} />
         </div>
     );
 };

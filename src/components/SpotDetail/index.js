@@ -64,49 +64,62 @@ const SpotDetail = ({ spot, lang }) => {
                     </div>
                 )}
 
-                {spot.sns_links && Object.keys(spot.sns_links).length > 0 && (
+                {Array.isArray(spot.sns_links) && spot.sns_links.length > 0 && (
                     <div className={style.links}>
                         <h3 className={style.links_title}>{t("spotDetail.links")}</h3>
-                        {spot.sns_links && (
-                            <div className={style.sns_links}>
-                                {spot.sns_links.website && (
-                                    <Link href={spot.sns_links.website} target="_blank" rel="noopener noreferrer" className={style.sns_link}>
-                                        <TbWorld className={style.sns_icon} />
-                                        {t("spotDetail.officialSite")}
-                                    </Link>
-                                )}
-                                {spot.sns_links.twitter && (
-                                    <Link href={spot.sns_links.twitter} target="_blank" rel="noopener noreferrer" className={style.sns_link}>
-                                        <FaXTwitter className={style.sns_icon} />
-                                        {t("spotDetail.twitter")}
-                                    </Link>
-                                )}
-                                {spot.sns_links.x && (
-                                    <Link href={spot.sns_links.x} target="_blank" rel="noopener noreferrer" className={style.sns_link}>
-                                        <FaXTwitter className={style.sns_icon} />
-                                        {t("spotDetail.x")}
-                                    </Link>
-                                )}
-                                {spot.sns_links.instagram && (
-                                    <Link href={spot.sns_links.instagram} target="_blank" rel="noopener noreferrer" className={style.sns_link}>
-                                        <FaInstagram className={style.sns_icon} />
-                                        {t("spotDetail.instagram")}
-                                    </Link>
-                                )}
-                                {spot.sns_links.youtube && (
-                                    <Link href={spot.sns_links.youtube} target="_blank" rel="noopener noreferrer" className={style.sns_link}>
-                                        <FaYoutube className={style.sns_icon} />
-                                        {t("spotDetail.youtube")}
-                                    </Link>
-                                )}
-                                {spot.sns_links.facebook && (
-                                    <Link href={spot.sns_links.facebook} target="_blank" rel="noopener noreferrer" className={style.sns_link}>
-                                        <FaFacebook className={style.sns_icon} />
-                                        {t("spotDetail.facebook")}
-                                    </Link>
-                                )}
-                            </div>
-                        )}
+                        <div className={style.sns_links}>
+                            {spot.sns_links.map((item, index) => {
+                                if (!item || !item.platform || !item.url) return null;
+                                const url = item.url;
+                                const p = item.platform;
+                                switch (p) {
+                                    case "website":
+                                        return (
+                                            <Link key={index} href={url} target="_blank" rel="noopener noreferrer" className={style.sns_link}>
+                                                <TbWorld className={style.sns_icon} />
+                                                {t("spotDetail.officialSite")}
+                                            </Link>
+                                        );
+                                    case "x":
+                                        return (
+                                            <Link key={index} href={url} target="_blank" rel="noopener noreferrer" className={style.sns_link}>
+                                                <FaXTwitter className={style.sns_icon} />
+                                                {t("spotDetail.x")}
+                                            </Link>
+                                        );
+                                    case "twitter":
+                                        return (
+                                            <Link key={index} href={url} target="_blank" rel="noopener noreferrer" className={style.sns_link}>
+                                                <FaXTwitter className={style.sns_icon} />
+                                                {t("spotDetail.twitter")}
+                                            </Link>
+                                        );
+                                    case "instagram":
+                                        return (
+                                            <Link key={index} href={url} target="_blank" rel="noopener noreferrer" className={style.sns_link}>
+                                                <FaInstagram className={style.sns_icon} />
+                                                {t("spotDetail.instagram")}
+                                            </Link>
+                                        );
+                                    case "youtube":
+                                        return (
+                                            <Link key={index} href={url} target="_blank" rel="noopener noreferrer" className={style.sns_link}>
+                                                <FaYoutube className={style.sns_icon} />
+                                                {t("spotDetail.youtube")}
+                                            </Link>
+                                        );
+                                    case "facebook":
+                                        return (
+                                            <Link key={index} href={url} target="_blank" rel="noopener noreferrer" className={style.sns_link}>
+                                                <FaFacebook className={style.sns_icon} />
+                                                {t("spotDetail.facebook")}
+                                            </Link>
+                                        );
+                                    default:
+                                        return null;
+                                }
+                            })}
+                        </div>
                     </div>
                 )}
             </div>

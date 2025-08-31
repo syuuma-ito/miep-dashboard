@@ -1,115 +1,105 @@
 "use client";
 
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState } from "react";
+import { Controller, useFieldArray } from "react-hook-form";
 import { FaFacebook, FaInstagram, FaYoutube } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { TbWorld } from "react-icons/tb";
-import style from "./index.module.css";
-
-import { memo } from "react";
-
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import ErrorMessage from "./error";
+import style from "./forms.module.css";
 
 const platforms = ["website", "x", "instagram", "facebook", "youtube", "twitter"];
 
-function listToObject(list) {
-    return list.reduce((acc, item) => {
-        acc[item.platform] = item.url;
-        return acc;
-    }, {});
-}
-
-function objectToList(obj) {
-    return Object.entries(obj).map(([platform, url]) => ({
-        platform,
-        url,
-    }));
-}
-
-const SnsLinks = ({ snsLinks, setSnsLinks }) => {
-    const safeObj = snsLinks || {};
-    const list = objectToList(safeObj);
-
-    const addLink = () => {
-        const newList = [...list, { platform: "", url: "" }];
-        setSnsLinks(listToObject(newList));
-    };
-
-    const updateLink = (index, field, value) => {
-        const newList = list.map((v, i) => (i === index ? { ...v, [field]: value } : v));
-        setSnsLinks(listToObject(newList));
-    };
-
-    const removeLink = (index) => {
-        const newList = list.filter((_, i) => i !== index);
-        setSnsLinks(listToObject(newList));
-    };
+const SnsLinks = ({ control, register, errors, name = "sns_links" }) => {
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name,
+    });
 
     const [pendingDelete, setPendingDelete] = useState(null);
+
+    const addLink = () => {
+        append({ platform: "", url: "" });
+    };
+
     const confirmRemove = () => {
         if (pendingDelete !== null) {
-            removeLink(pendingDelete);
+            remove(pendingDelete);
             setPendingDelete(null);
         }
     };
 
+    const snsErrors = errors?.[name];
+
     return (
-        <div className={style.container}>
+        <div className={style.section}>
             <h2>SNSリンク</h2>
-            {list.map((item, idx) => (
-                <div className={style.inputContainer} key={idx}>
-                    <p>リンク{idx + 1}</p>
-                    <div className={style.imageInputRow} style={{ alignItems: "center" }}>
-                        <div style={{ width: 180 }}>
-                            <Select value={item.platform} onValueChange={(val) => updateLink(idx, "platform", val)}>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {platforms.map((p) => (
-                                        <SelectItem value={p} key={p}>
-                                            {p}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
+            {fields.map((field, index) => {
+                return (
+                    <div className={style.inputContainer} key={field.id}>
+                        <div className={style.inputWithLabel}>
+                            <label>リンク{index + 1}</label>
+                            <div style={{ width: "8rem" }}>
+                                <Controller
+                                    control={control}
+                                    name={`${name}.${index}.platform`}
+                                    render={({ field: controllerField }) => (
+                                        <>
+                                            <Select value={controllerField.value} onValueChange={controllerField.onChange}>
+                                                <SelectTrigger style={{ width: "90%" }}>
+                                                    <SelectValue placeholder="選択..." />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {platforms.map((p) => (
+                                                        <SelectItem value={p} key={p}>
+                                                            {p}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                            <ErrorMessage message={snsErrors?.[index]?.platform?.message} />
+                                        </>
+                                    )}
+                                />
+                            </div>
+
+                            <div className={style.icon}>
+                                {field.platform === "x" && <FaXTwitter />}
+                                {field.platform === "instagram" && <FaInstagram />}
+                                {field.platform === "facebook" && <FaFacebook />}
+                                {field.platform === "youtube" && <FaYoutube />}
+                                {field.platform === "twitter" && <FaXTwitter />}
+                                {field.platform === "website" && <TbWorld />}
+                            </div>
+
+                            <div style={{ flex: 1 }}>
+                                <Input placeholder="URLを入力" {...register(`${name}.${index}.url`)} />
+                                <ErrorMessage message={snsErrors?.[index]?.url?.message} />
+                            </div>
+
+                            <Button type="button" onClick={() => setPendingDelete(index)} variant="destructive">
+                                削除
+                            </Button>
                         </div>
-
-                        <div className={style.icon}>
-                            {item.platform === "x" && <FaXTwitter />}
-                            {item.platform === "instagram" && <FaInstagram />}
-                            {item.platform === "facebook" && <FaFacebook />}
-                            {item.platform === "youtube" && <FaYoutube />}
-                            {item.platform === "twitter" && <FaXTwitter />}
-                            {item.platform === "website" && <TbWorld />}
-                        </div>
-
-                        <Input placeholder="URLを入力" value={item.url} onChange={(e) => updateLink(idx, "url", e.target.value)} />
-
-                        <Button onClick={() => setPendingDelete(idx)}>削除</Button>
                     </div>
-                </div>
-            ))}
+                );
+            })}
 
-            <div className={style.inputContainer}>
-                <p />
-                <div>
-                    <Button onClick={addLink}>リンクを追加</Button>
-                </div>
+            <div className={style.addButton}>
+                <Button type="button" onClick={addLink}>
+                    リンクを追加
+                </Button>
             </div>
-            <AlertDialog
-                open={pendingDelete !== null}
-                onOpenChange={(open) => {
-                    if (!open) setPendingDelete(null);
-                }}
-            >
+
+            <AlertDialog open={pendingDelete !== null} onOpenChange={(open) => !open && setPendingDelete(null)}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>SNSリンクを削除しますか？</AlertDialogTitle>
-                        <AlertDialogDescription>この操作は元に戻せません。URL : {pendingDelete !== null ? list[pendingDelete]?.url : ""}</AlertDialogDescription>
+                        <AlertDialogDescription>この操作は元に戻せません。</AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel onClick={() => setPendingDelete(null)}>キャンセル</AlertDialogCancel>
@@ -121,4 +111,4 @@ const SnsLinks = ({ snsLinks, setSnsLinks }) => {
     );
 };
 
-export default memo(SnsLinks);
+export default SnsLinks;

@@ -1,17 +1,21 @@
 import { Input } from "@/components/ui/input";
-import { memo } from "react";
-import style from "./index.module.css";
+import style from "./forms.module.css";
 
-const IconUrl = ({ iconUrl, setIconUrl }) => {
+import ErrorMessage from "./error";
+
+const IconUrl = ({ register, errors }) => {
     return (
-        <div className={style.container}>
+        <div className={style.section}>
             <h2>アイコン</h2>
             <div className={style.inputContainer}>
-                <p>URL</p>
-                <Input placeholder="アイコンのURLを入力" value={iconUrl} onChange={(e) => setIconUrl(e.target.value)} />
+                <div className={style.inputWithLabel}>
+                    <label>URL</label>
+                    <Input placeholder="アイコンのURLを入力" {...register("icon")} />
+                </div>
+                <ErrorMessage message={errors.icon?.message} className={style.errorMessage} />
             </div>
         </div>
     );
 };
 
-export default memo(IconUrl);
+export default IconUrl;

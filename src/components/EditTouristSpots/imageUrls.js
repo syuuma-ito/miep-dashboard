@@ -2,64 +2,38 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
-import style from "./index.module.css";
+import { useFieldArray } from "react-hook-form";
+import ErrorMessage from "./error";
+import style from "./forms.module.css";
 
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-
-import { memo } from "react";
-
-const ImageUrls = ({ images, setImages }) => {
-    const addImage = () => setImages((prev) => [...prev, ""]);
-    const updateImage = (index, value) => setImages((prev) => prev.map((v, i) => (i === index ? value : v)));
-    const removeImage = (index) => setImages((prev) => prev.filter((_, i) => i !== index));
-
-    const [pendingDelete, setPendingDelete] = useState(null);
-    const confirmRemove = () => {
-        if (pendingDelete !== null) {
-            removeImage(pendingDelete);
-            setPendingDelete(null);
-        }
-    };
+const ImageUrls = ({ control, register, errors }) => {
+    const { fields, append, remove } = useFieldArray({ control, name: "images" });
 
     return (
-        <div className={style.container}>
+        <div className={style.section}>
             <h2>画像</h2>
-            {images.map((url, idx) => (
-                <div className={style.inputContainer} key={idx}>
-                    <p>URL {idx + 1}</p>
-                    <div className={style.imageInputRow}>
-                        <Input placeholder="画像のURLを入力" value={url} onChange={(e) => updateImage(idx, e.target.value)} />
-                        <Button onClick={() => setPendingDelete(idx)}>削除</Button>
+            {fields.map((field, index) => (
+                <div className={style.inputContainer} key={field.id}>
+                    <div className={style.inputWithLabel}>
+                        <label>URL {index + 1}</label>
+                        <Input placeholder="画像のURLを入力" {...register(`images.${index}`)} />
+                        <Button type="button" onClick={() => remove(index)} variant="destructive">
+                            削除
+                        </Button>
                     </div>
+                    <ErrorMessage message={errors.images?.[index]?.message} className={style.errorMessage} />
                 </div>
             ))}
 
-            <div className={style.inputContainer}>
-                <p />
-                <div>
-                    <Button onClick={addImage}>画像を追加</Button>
-                </div>
+            <ErrorMessage message={errors.images?.root?.message || errors.images?.message} className={style.errorMessage} />
+
+            <div className={style.addButton}>
+                <Button type="button" onClick={() => append("")}>
+                    画像を追加
+                </Button>
             </div>
-            <AlertDialog
-                open={pendingDelete !== null}
-                onOpenChange={(open) => {
-                    if (!open) setPendingDelete(null);
-                }}
-            >
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>画像URLを削除しますか？</AlertDialogTitle>
-                        <AlertDialogDescription>この操作は元に戻せません。URL : {pendingDelete !== null ? images[pendingDelete] : ""}</AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel onClick={() => setPendingDelete(null)}>キャンセル</AlertDialogCancel>
-                        <AlertDialogAction onClick={confirmRemove}>削除する</AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
         </div>
     );
 };
 
-export default memo(ImageUrls);
+export default ImageUrls;

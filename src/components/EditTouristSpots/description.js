@@ -1,25 +1,34 @@
 import { Textarea } from "@/components/ui/textarea";
-import { memo } from "react";
-import style from "./index.module.css";
+import ErrorMessage from "./error";
+import style from "./forms.module.css";
 
-const Description = ({ description_ja, description_en, description_ko, setDescription_ja, setDescription_en, setDescription_ko }) => {
+const Description = ({ control, errors }) => {
     return (
-        <div className={style.container}>
+        <div className={style.section}>
             <h2>詳細</h2>
             <div className={style.inputContainer}>
-                <p>日本語</p>
-                <Textarea value={description_ja} onChange={(e) => setDescription_ja(e.target.value)} required />
+                <div className={style.inputWithLabel}>
+                    <label>日本語</label>
+                    <Textarea {...control.register("description.ja")} required />
+                </div>
+                <ErrorMessage message={errors?.description?.ja?.message} className={style.errorMessage} />
             </div>
             <div className={style.inputContainer}>
-                <p>英語</p>
-                <Textarea value={description_en} onChange={(e) => setDescription_en(e.target.value)} required />
+                <div className={style.inputWithLabel}>
+                    <label>英語</label>
+                    <Textarea {...control.register("description.en")} required />
+                </div>
+                <ErrorMessage message={errors?.description?.en?.message} className={style.errorMessage} />
             </div>
             <div className={style.inputContainer}>
-                <p>韓国語</p>
-                <Textarea value={description_ko} onChange={(e) => setDescription_ko(e.target.value)} required />
+                <div className={style.inputWithLabel}>
+                    <label>韓国語</label>
+                    <Textarea {...control.register("description.ko")} required />
+                </div>
+                <ErrorMessage message={errors?.description?.ko?.message} className={style.errorMessage} />
             </div>
         </div>
     );
 };
 
-export default memo(Description);
+export default Description;

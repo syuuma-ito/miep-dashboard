@@ -1,129 +1,85 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import Description from "./description";
 import IconUrl from "./iconUrl";
 import ImageUrls from "./imageUrls";
 import style from "./index.module.css";
 import Info from "./info";
 import Location from "./location";
+import SpotsName from "./name";
 import NearbyRecommendations from "./nearbyRecommendations";
 import RecommendedFor from "./recommendedFor";
 import SnsLinks from "./snsLinks";
 import TagSelector from "./tagSelector";
-import TouristSpotsName from "./touristSpotsName";
+
+import { placeSchema } from "@/lib/placeSchema";
 
 export default function EditTouristSpots({ touristSpot, onSave, onPreview }) {
-    const [name_ja, setName_ja] = useState("");
-    const [name_en, setName_en] = useState("");
-    const [name_ko, setName_ko] = useState("");
-    const [iconUrl, setIconUrl] = useState("");
-    const [images, setImages] = useState([]);
-    const [latitude, setLatitude] = useState(0);
-    const [longitude, setLongitude] = useState(0);
-    const [tags, setTags] = useState([]);
-    const [description_ja, setDescription_ja] = useState("");
-    const [description_en, setDescription_en] = useState("");
-    const [description_ko, setDescription_ko] = useState("");
-    const [recommendedFor_jp, setRecommendedFor_jp] = useState("");
-    const [recommendedFor_en, setRecommendedFor_en] = useState("");
-    const [recommendedFor_ko, setRecommendedFor_ko] = useState("");
-    const [info, setInfo] = useState([]);
-    const [nearbyRecommendations, setNearbyRecommendations] = useState([]);
-    const [snsLinks, setSnsLinks] = useState({});
-
-    const data = {
-        name: {
-            ja: name_ja,
-            en: name_en,
-            ko: name_ko,
+    const {
+        register,
+        control,
+        handleSubmit,
+        watch,
+        reset,
+        formState: { errors },
+    } = useForm({
+        resolver: zodResolver(placeSchema),
+        mode: "onChange",
+        defaultValues: {
+            name: { ja: "", en: "", ko: "" },
+            icon: "",
+            images: [],
+            latitude: 35,
+            longitude: 135,
+            tags: [],
+            description: { ja: "", en: "", ko: "" },
+            recommended_for: { ja: "", en: "", ko: "" },
+            info: [],
+            nearby_recommendations: [],
+            sns_links: [],
         },
-        icon: iconUrl,
-        images: images,
-        latitude: latitude,
-        longitude: longitude,
-        tags: tags,
-        description: {
-            ja: description_ja,
-            en: description_en,
-            ko: description_ko,
-        },
-        recommended_for: {
-            ja: recommendedFor_jp,
-            en: recommendedFor_en,
-            ko: recommendedFor_ko,
-        },
-        info: info,
-        nearby_recommendations: nearbyRecommendations,
-        sns_links: snsLinks,
-    };
+    });
 
     useEffect(() => {
-        if (touristSpot && Object.keys(touristSpot).length > 0) {
-            setName_ja(touristSpot.name.ja);
-            setName_en(touristSpot.name.en);
-            setName_ko(touristSpot.name.ko);
-            setIconUrl(touristSpot.icon);
-            setImages(touristSpot.images);
-            setLatitude(touristSpot.latitude);
-            setLongitude(touristSpot.longitude);
-            setTags(touristSpot.tags);
-            setDescription_ja(touristSpot.description.ja);
-            setDescription_en(touristSpot.description.en);
-            setDescription_ko(touristSpot.description.ko);
-            setRecommendedFor_jp(touristSpot.recommended_for.ja);
-            setRecommendedFor_en(touristSpot.recommended_for.en);
-            setRecommendedFor_ko(touristSpot.recommended_for.ko);
-            setInfo(touristSpot.info);
-            setNearbyRecommendations(touristSpot.nearby_recommendations);
-            setSnsLinks(touristSpot.sns_links);
+        if (touristSpot) {
+            reset(touristSpot);
         }
-    }, [touristSpot]);
+    }, [touristSpot, reset]);
+
+    const saveHandler = handleSubmit((data) => {
+        if (onSave) onSave(data);
+    });
+
+    const previewHandler = handleSubmit((data) => {
+        if (onPreview) onPreview(data);
+    });
 
     return (
         <div className={style.main}>
             <div className={style.header}>
                 <h1 className={style.title}>観光地の編集</h1>
                 <div className={style.buttonContainer}>
-                    <Button onClick={() => onSave(data)}>保存</Button>
-                    <Button variant="outline" onClick={() => onPreview(data)}>
+                    <Button onClick={saveHandler}>保存</Button>
+                    <Button variant="outline" onClick={previewHandler}>
                         プレビュー
                     </Button>
                 </div>
             </div>
             <div className={style.editorContainer}>
-                <TouristSpotsName name_ja={name_ja} name_en={name_en} name_ko={name_ko} setName_ja={setName_ja} setName_en={setName_en} setName_ko={setName_ko} />
-                <IconUrl iconUrl={iconUrl} setIconUrl={setIconUrl} />
-                <ImageUrls images={images} setImages={setImages} />
-
-                <Location latitude={latitude} setLatitude={setLatitude} longitude={longitude} setLongitude={setLongitude} />
-
-                <TagSelector selectedTags={tags} setSelectedTags={setTags} />
-
-                <Description
-                    description_ja={description_ja}
-                    description_en={description_en}
-                    description_ko={description_ko}
-                    setDescription_ja={setDescription_ja}
-                    setDescription_en={setDescription_en}
-                    setDescription_ko={setDescription_ko}
-                />
-
-                <RecommendedFor
-                    recommendedFor_jp={recommendedFor_jp}
-                    recommendedFor_en={recommendedFor_en}
-                    recommendedFor_ko={recommendedFor_ko}
-                    setRecommendedFor_jp={setRecommendedFor_jp}
-                    setRecommendedFor_en={setRecommendedFor_en}
-                    setRecommendedFor_ko={setRecommendedFor_ko}
-                />
-
-                <Info info={info} setInfo={setInfo} />
-
-                <NearbyRecommendations nearbyRecommendations={nearbyRecommendations} setNearbyRecommendations={setNearbyRecommendations} />
-
-                <SnsLinks snsLinks={snsLinks} setSnsLinks={setSnsLinks} />
+                <SpotsName register={register} errors={errors} />
+                <IconUrl register={register} errors={errors} />
+                <ImageUrls register={register} errors={errors} control={control} />
+                <Location register={register} errors={errors} />
+                <TagSelector control={control} name="tags" errors={errors} />
+                <Description control={control} errors={errors} />
+                <RecommendedFor control={control} errors={errors} />
+                <Info control={control} register={register} errors={errors} name="info" />
+                <NearbyRecommendations control={control} errors={errors} name="nearby_recommendations" />
+                <SnsLinks control={control} errors={errors} register={register} name="sns_links" />
             </div>
         </div>
     );
