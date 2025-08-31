@@ -14,27 +14,19 @@ import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { useSearchParams } from "next/navigation";
 
 import style from "./page.module.css";
 
 export default function Page() {
     const { supabase, user, loading } = useAuth();
 
-    const searchParams = useSearchParams();
-    const id = searchParams.get("id");
     const router = useRouter();
-
-    const [touristSpot, setTouristSpot] = useState(null);
 
     const [previewData, setPreviewData] = useState(null);
     const [previewLang, setPreviewLang] = useState("ja");
 
     const [allTags, setAllTags] = useState([]);
     const [allTouristSpots, setAllTouristSpots] = useState([]);
-
-    const [isError, setIsError] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
 
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [pendingSaveData, setPendingSaveData] = useState(null);
@@ -60,31 +52,10 @@ export default function Page() {
         }
     }, [loading, user, router]);
 
-    useEffect(() => {
-        if (!supabase || !id) return;
-        const fetchTouristSpot = async () => {
-            const { data, error } = await supabase.rpc("get_spot_by_id", { p_spot_id: id });
-
-            if (error) {
-                setIsError(true);
-                setErrorMessage("観光スポットの取得に失敗しました");
-            } else {
-                setTouristSpot(data);
-                setPreviewData(data);
-            }
-        };
-
-        fetchTouristSpot();
-    }, [supabase, id]);
-
-    const handleSave = useCallback(
-        (data) => {
-            data.id = id;
-            setPendingSaveData(data);
-            setConfirmOpen(true);
-        },
-        [id]
-    );
+    const handleSave = useCallback((data) => {
+        setPendingSaveData(data);
+        setConfirmOpen(true);
+    }, []);
 
     const performSave = useCallback(async () => {
         if (!pendingSaveData) return;
@@ -92,15 +63,15 @@ export default function Page() {
         const data = pendingSaveData;
         setPendingSaveData(null);
 
-        console.log("Saving data:", data);
-        const { error } = await supabase.rpc("upsert_spot", { p_data: data });
+        const { error, data: newId } = await supabase.rpc("upsert_spot", { p_data: data });
 
         if (error) {
-            toast.error("保存に失敗しました");
+            toast.error("新規作成に失敗しました");
         } else {
-            toast.success("保存しました");
+            toast.success("新規作成しました");
+            router.push(`/tourist-spots/?id=${newId}`);
         }
-    }, [pendingSaveData, supabase]);
+    }, [pendingSaveData, supabase, router]);
 
     const handlePreview = useCallback((data) => {
         toast.info("プレビューを更新しました");
@@ -113,19 +84,11 @@ export default function Page() {
         return <div>Loading...</div>;
     }
 
-    if (!id) {
-        return <div>Tourist spot not found</div>;
-    }
-
-    if (isError) {
-        return <div>{errorMessage}</div>;
-    }
-
     return (
         <>
             <ResizablePanelGroup direction="horizontal" className={style.container}>
                 <ResizablePanel defaultSize={30} className="flex-1 h-full ">
-                    <EditTouristSpots touristSpot={touristSpot} onSave={handleSave} onPreview={handlePreview} title="編集" />
+                    <EditTouristSpots onSave={handleSave} onPreview={handlePreview} title="新規作成" />
                 </ResizablePanel>
                 <ResizableHandle withHandle />
                 <ResizablePanel defaultSize={70}>
@@ -148,12 +111,12 @@ export default function Page() {
             <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>変更を保存してもいいですか？</AlertDialogTitle>
+                        <AlertDialogTitle>観光地を新規作成しますか？</AlertDialogTitle>
                         <AlertDialogDescription>保存されるとすぐに反映されます。</AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel>キャンセル</AlertDialogCancel>
-                        <AlertDialogAction onClick={performSave}>保存</AlertDialogAction>
+                        <AlertDialogAction onClick={performSave}>新規作成</AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>

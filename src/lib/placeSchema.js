@@ -35,9 +35,6 @@ const snsLinksSchema = z
     .optional();
 
 export const placeSchema = z.object({
-    id: z.uuid({
-        message: invalidFormatError("ID", "UUID"),
-    }),
     name: createMultilingualSchema("観光地名"),
     icon: z.url({
         message: invalidFormatError("アイコンURL", "URL"),
