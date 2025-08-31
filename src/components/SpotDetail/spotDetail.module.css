@@ -1,0 +1,170 @@
+.spot_detail {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow-y: auto;
+}
+
+.closeButton {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 2rem;
+    height: 2rem;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+}
+.closeButton_icon {
+    width: 100%;
+    height: 100%;
+}
+
+.spotdetail > div:first-child {
+    margin-bottom: 0;
+}
+
+.spot_info_container {
+    padding: 1rem;
+}
+.spot_name {
+    font-size: 2rem;
+    margin: 0.5rem 0;
+}
+.spot_name::after {
+    content: "";
+    font-weight: bold;
+    border-bottom: 2px dashed #a4cfe3;
+    display: block;
+    margin-top: 0.5rem;
+}
+
+.tags {
+    margin: 1rem 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.spot_description {
+    margin: 1rem 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.recommended_for {
+    position: relative;
+    background: var(--background);
+    border: 1px solid var(--foreground);
+    border-radius: 1rem;
+    margin: 2rem 0;
+    padding: 1rem;
+}
+.recommended_for::before {
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 100%;
+    border: 1px solid var(--foreground);
+    border-radius: 1rem;
+    transform: translate(-0.7em, -0.7rem);
+    z-index: -1;
+}
+
+.recommended_for_label {
+    position: absolute;
+    top: -0.8rem;
+    left: 1rem;
+    background: var(--background);
+    padding: 0 0.5rem;
+    font-size: 1rem;
+}
+
+.recommended_for_label::after {
+    content: "";
+    font-weight: bold;
+    border-bottom: 2px dashed #a4cfe3;
+    display: block;
+    margin-top: 0.1rem;
+}
+
+.recommended_for_description {
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+.info {
+    margin: 2rem 0;
+}
+
+.info_item {
+    margin-bottom: 1rem;
+}
+
+.info_label {
+    font-size: 1.2rem;
+}
+
+.info_value {
+    margin-left: 1.5rem;
+}
+
+.nearby_recommendations {
+    margin: 1rem 0;
+}
+
+.nearby_recommendations_title {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+    width: 100%;
+}
+
+.nearby_recommendations_title::after {
+    content: "";
+    font-weight: bold;
+    border-bottom: 2px dashed #a4cfe3;
+    display: block;
+    margin-top: 0.5rem;
+}
+.links {
+    margin: 1rem 0;
+}
+
+.links_title {
+    font-size: 1.3rem;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.links_title::after {
+    content: "";
+    font-weight: bold;
+    border-bottom: 2px dashed #a4cfe3;
+    display: block;
+    margin-top: 0.5rem;
+}
+
+.sns_links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.sns_link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    text-decoration: none;
+    color: var(--foreground);
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s;
+}
+
+.sns_link:hover {
+    background-color: #f5f5f5;
+}
+
+.sns_icon {
+    font-size: 1.2rem;
+}

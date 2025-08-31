@@ -1,0 +1,77 @@
+{
+    "langName": "한국어",
+    "locale": "ko-KR",
+    "metadata": {
+        "title": "미엣푸 | “미에가 보이는” 디지털 관광 지도",
+        "description": "미엣푸 | 미에대학 학생들이 만들었다!! “미에가 보이는” 디지털 관광 지도",
+        "keywords": "미에, 미에현, 관광, 디지털 관광 지도, 관광 지도, 일본"
+    },
+    "debug": {
+        "map": {
+            "info": "디버그용",
+            "zoom": "확대율",
+            "latitude": "위도",
+            "longitude": "경도"
+        }
+    },
+    "alt": {
+        "mapControls": {
+            "zoomIn": "확대",
+            "zoomOut": "축소",
+            "resetNorth": "북쪽을 위로",
+            "locate": "현재 위치表示"
+        },
+        "marker": {
+            "icon": "관광 명소 아이콘"
+        },
+        "logo": "로고"
+    },
+    "navigation": {
+        "title": "내비게이션 메뉴",
+        "map": "지도",
+        "about": "이 사이트에 대하여"
+    },
+    "search": {
+        "title": "검색 메뉴",
+        "placeholder": "검색・필터링",
+        "label": "검색어",
+        "tagSelector": {
+            "title": "태그로 필터링",
+            "selected": "선택된 태그",
+            "all": "모든 태그"
+        },
+        "button": "검색",
+        "clear": "초기화",
+        "filtersClearedMessage": "필터가 초기화되었습니다",
+        "results": "검색 결과 {{count}} 건",
+        "noResults": "일치하는 명소가 없습니다"
+    },
+    "searchInfo": {
+        "title": "필터링 중",
+        "query": "검색어",
+        "tags": "선택된 태그"
+    },
+    "spotDetail": {
+        "recommendedFor": "이런 분들에게 추천!",
+        "nearbyRecommendations": "주변 추천 명소",
+        "links": "링크",
+        "officialSite": "공식 사이트",
+        "twitter": "X (Twitter)",
+        "x": "X (Twitter)",
+        "instagram": "Instagram",
+        "youtube": "YouTube",
+        "facebook": "Facebook"
+    },
+    "loading": {
+        "message": "로딩 중...",
+        "label": "미에의 관광 명소를 찾고 있습니다...",
+        "locating": "현재 위치를 가져오는 중..."
+    },
+    "error": {
+        "noMap": "지도가 로드되어 있지 않습니다",
+        "geolocationFailed": "현재 위치를 가져오지 못했습니다",
+        "geolocationDenied": "위치 정보 사용이 허용되지 않았습니다",
+        "geolocationUnavailable": "위치 정보를 가져올 수 없습니다",
+        "geolocationTimeout": "위치 정보 가져오기가 시간 초과되었습니다"
+    }
+}

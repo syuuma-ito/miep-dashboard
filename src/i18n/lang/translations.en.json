@@ -1,0 +1,77 @@
+{
+    "langName": "English",
+    "locale": "en-US",
+    "metadata": {
+        "title": "Mieppu | Digital Sightseeing Map to \"See Mie\"",
+        "description": "Mieppu | Created by Mie University students!! Digital Sightseeing Map to \"See Mie\"",
+        "keywords": "Mie, Mie Prefecture, Sightseeing, Digital Sightseeing Map, Sightseeing Map, Japan"
+    },
+    "debug": {
+        "map": {
+            "info": "For debugging",
+            "zoom": "Zoom",
+            "latitude": "Latitude",
+            "longitude": "Longitude"
+        }
+    },
+    "alt": {
+        "mapControls": {
+            "zoomIn": "Zoom In",
+            "zoomOut": "Zoom Out",
+            "resetNorth": "North Up",
+            "locate": "Locate me"
+        },
+        "marker": {
+            "icon": "Tourist spot icon"
+        },
+        "logo": "Logo"
+    },
+    "navigation": {
+        "title": "Navigation Menu",
+        "map": "Map",
+        "about": "About this site"
+    },
+    "search": {
+        "title": "Search Menu",
+        "placeholder": "Search/Filter",
+        "label": "Search Keyword",
+        "tagSelector": {
+            "title": "Filter by tag",
+            "selected": "Selected tags",
+            "all": "All tags"
+        },
+        "button": "Search",
+        "clear": "Clear",
+        "filtersClearedMessage": "Filters cleared",
+        "results": "Search results {{count}} found",
+        "noResults": "No matching spots found"
+    },
+    "searchInfo": {
+        "title": "Filtering",
+        "query": "Search Keyword",
+        "tags": "Selected Tags"
+    },
+    "spotDetail": {
+        "recommendedFor": "Recommended for!",
+        "nearbyRecommendations": "Nearby recommendations",
+        "links": "Links",
+        "officialSite": "Official Site",
+        "twitter": "X (Twitter)",
+        "x": "X (Twitter)",
+        "instagram": "Instagram",
+        "youtube": "YouTube",
+        "facebook": "Facebook"
+    },
+    "loading": {
+        "message": "Loading...",
+        "label": "Searching for tourist spots in Mie...",
+        "locating": "Locating..."
+    },
+    "error": {
+        "noMap": "Map is not loaded",
+        "geolocationFailed": "Failed to get current location",
+        "geolocationDenied": "Location permission denied",
+        "geolocationUnavailable": "Location unavailable",
+        "geolocationTimeout": "Location request timed out"
+    }
+}

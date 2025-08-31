@@ -1,0 +1,18 @@
+.langSelect {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    z-index: 50;
+    background-color: rgba(255, 255, 255, 0.9);
+    height: 3rem;
+    border-radius: 1.5rem;
+    padding: 0 1rem;
+}
+
+.selectContent {
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}

@@ -33,28 +33,6 @@ export default function EditTouristSpots({ touristSpot, onSave, onPreview }) {
     const [nearbyRecommendations, setNearbyRecommendations] = useState([]);
     const [snsLinks, setSnsLinks] = useState({});
 
-    useEffect(() => {
-        if (touristSpot && Object.keys(touristSpot).length > 0) {
-            setName_ja(touristSpot.name.ja);
-            setName_en(touristSpot.name.en);
-            setName_ko(touristSpot.name.ko);
-            setIconUrl(touristSpot.icon);
-            setImages(touristSpot.images);
-            setLatitude(touristSpot.latitude);
-            setLongitude(touristSpot.longitude);
-            setTags(touristSpot.tags);
-            setDescription_ja(touristSpot.description_ja);
-            setDescription_en(touristSpot.description_en);
-            setDescription_ko(touristSpot.description_ko);
-            setRecommendedFor_jp(touristSpot.recommendedFor_jp);
-            setRecommendedFor_en(touristSpot.recommendedFor_en);
-            setRecommendedFor_ko(touristSpot.recommendedFor_ko);
-            setInfo(touristSpot.info);
-            setNearbyRecommendations(touristSpot.nearby_recommendations);
-            setSnsLinks(touristSpot.sns_links);
-        }
-    }, [touristSpot]);
-
     const data = {
         name: {
             ja: name_ja,
@@ -71,7 +49,7 @@ export default function EditTouristSpots({ touristSpot, onSave, onPreview }) {
             en: description_en,
             ko: description_ko,
         },
-        recommendedFor: {
+        recommended_for: {
             ja: recommendedFor_jp,
             en: recommendedFor_en,
             ko: recommendedFor_ko,
@@ -81,10 +59,32 @@ export default function EditTouristSpots({ touristSpot, onSave, onPreview }) {
         sns_links: snsLinks,
     };
 
+    useEffect(() => {
+        if (touristSpot && Object.keys(touristSpot).length > 0) {
+            setName_ja(touristSpot.name.ja);
+            setName_en(touristSpot.name.en);
+            setName_ko(touristSpot.name.ko);
+            setIconUrl(touristSpot.icon);
+            setImages(touristSpot.images);
+            setLatitude(touristSpot.latitude);
+            setLongitude(touristSpot.longitude);
+            setTags(touristSpot.tags);
+            setDescription_ja(touristSpot.description.ja);
+            setDescription_en(touristSpot.description.en);
+            setDescription_ko(touristSpot.description.ko);
+            setRecommendedFor_jp(touristSpot.recommended_for.ja);
+            setRecommendedFor_en(touristSpot.recommended_for.en);
+            setRecommendedFor_ko(touristSpot.recommended_for.ko);
+            setInfo(touristSpot.info);
+            setNearbyRecommendations(touristSpot.nearby_recommendations);
+            setSnsLinks(touristSpot.sns_links);
+        }
+    }, [touristSpot]);
+
     return (
         <div className={style.main}>
             <div className={style.header}>
-                <h1 className={style.title}>{name_ja || "観光地の編集"}</h1>
+                <h1 className={style.title}>観光地の編集</h1>
                 <div className={style.buttonContainer}>
                     <Button onClick={() => onSave(data)}>保存</Button>
                     <Button variant="outline" onClick={() => onPreview(data)}>

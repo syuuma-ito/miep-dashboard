@@ -1,0 +1,83 @@
+.maskingTape {
+    position: relative;
+    width: fit-content;
+    transform: translate(0, calc(-50% + 20px)) scale(var(--actual-marker-scale));
+    font-family: var(--font-zen-maru-gothic);
+}
+
+.text {
+    position: relative;
+    padding: 12px 16px;
+    border-radius: 6px;
+    background-color: #ffe59f;
+}
+.text::before {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: calc(50% - 7.5px);
+    width: 15px;
+    height: 15px;
+    transform: rotate(135deg);
+    box-sizing: border-box;
+    background-color: #ffe59f;
+}
+.ornament {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+.ornament::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -10px;
+    width: 36px;
+    height: 16px;
+    transform: rotate(-45deg);
+    box-sizing: border-box;
+    background-color: #56ccff;
+    mix-blend-mode: multiply;
+}
+.ornament::after {
+    content: "";
+    position: absolute;
+    top: calc(100% - 15px);
+    right: -10px;
+    width: 36px;
+    height: 16px;
+    transform: rotate(-45deg);
+    background-color: #ff5fb4;
+    box-sizing: border-box;
+    mix-blend-mode: multiply;
+}
+
+@keyframes speechBubbleShake {
+    0% {
+        transform: rotate(0deg);
+    }
+    20% {
+        transform: rotate(-2deg);
+    }
+    40% {
+        transform: rotate(2deg);
+    }
+    60% {
+        transform: rotate(-1deg);
+    }
+    80% {
+        transform: rotate(1deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+.shake {
+    transform-origin: center;
+    animation: speechBubbleShake 700ms ease-in-out 1;
+}
+
+.container {
+    transform-origin: center;
+}

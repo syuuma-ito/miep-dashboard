@@ -10,13 +10,27 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { memo } from "react";
 
 const Info = ({ info, setInfo }) => {
-    const addInfo = () => setInfo((prev) => [...prev, { key: { ja: "", en: "", ko: "" }, value: { ja: "", en: "", ko: "" } }]);
+    const sortedInfo = [...info].sort((a, b) => a.display_order - b.display_order);
+
+    const renumberDisplayOrder = (arr) => {
+        return arr.map((item, idx) => ({ ...item, display_order: idx }));
+    };
+
+    const addInfo = () => {
+        setInfo((prev) => {
+            const maxOrder = prev.length > 0 ? Math.max(...prev.map((i) => i.display_order ?? 0)) : -1;
+            const newArr = [...prev, { key: { ja: "", en: "", ko: "" }, value: { ja: "", en: "", ko: "" }, display_order: maxOrder + 1 }];
+            return renumberDisplayOrder(newArr);
+        });
+    };
 
     const updateInfo = (idx, path, value) => {
-        setInfo((prev) =>
-            prev.map((it, i) => {
+        setInfo((prev) => {
+            const sorted = [...prev].sort((a, b) => a.display_order - b.display_order);
+            const newArr = sorted.map((it, i) => {
                 if (i !== idx) return it;
                 const copy = {
+                    ...it,
                     key: { ...it.key },
                     value: { ...it.value },
                 };
@@ -28,14 +42,19 @@ const Info = ({ info, setInfo }) => {
                     }
                 }
                 return copy;
-            })
-        );
+            });
+            return renumberDisplayOrder(newArr);
+        });
     };
 
     const [pendingDelete, setPendingDelete] = useState(null);
 
     const removeInfo = (idx) => {
-        setInfo((prev) => prev.filter((_, i) => i !== idx));
+        setInfo((prev) => {
+            const sorted = [...prev].sort((a, b) => a.display_order - b.display_order);
+            const newArr = sorted.filter((_, i) => i !== idx);
+            return renumberDisplayOrder(newArr);
+        });
     };
     const confirmRemove = () => {
         if (pendingDelete !== null) {
@@ -47,8 +66,8 @@ const Info = ({ info, setInfo }) => {
     return (
         <div className={style.container}>
             <h2>詳細情報</h2>
-            {info.map((item, idx) => (
-                <div key={idx}>
+            {sortedInfo.map((item, idx) => (
+                <div key={item.display_order}>
                     <div className={style.inputHeader}>
                         <h3>詳細情報 {idx + 1}</h3>
                         <Button onClick={() => setPendingDelete(idx)}>削除</Button>

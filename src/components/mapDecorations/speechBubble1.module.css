@@ -1,0 +1,108 @@
+.speech_bubble {
+    position: relative;
+    display: inline-block;
+    padding: 8px 16px;
+    border: 1px solid var(--SpeechBubble1-color);
+    border-radius: 25px;
+    color: var(--SpeechBubble1-color);
+    background-color: var(--SpeechBubble1-background);
+    font-weight: 400;
+    line-height: 1.5;
+    scale: var(--actual-marker-scale);
+    font-family: var(--font-zen-maru-gothic);
+}
+
+.speech_bubble::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    border-style: solid;
+    border-color: var(--SpeechBubble1-color) transparent transparent;
+}
+
+.speech_bubble::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    border-style: solid;
+    border-color: var(--SpeechBubble1-background) transparent transparent;
+}
+
+.left {
+    text-align: left;
+    transform: translate(calc(50% - 17px), calc(-50% - 18px));
+}
+.left::before {
+    left: 32px;
+    transform: skew(-12deg);
+    translate: -50% 100%;
+    border-width: 20px 20px 0 0;
+}
+.left::after {
+    left: 32px;
+    border-width: 17.6px 17.6px 0 0;
+    transform: skew(-12deg);
+    translate: calc(-50% - 0.2px) 100%;
+}
+
+.right {
+    text-align: right;
+    transform: translate(calc(-50% + 35px), calc(-50% - 18px));
+}
+
+.right::before {
+    right: 32px;
+    transform: skew(12deg);
+    transform-origin: top;
+    translate: -50% 100%;
+    border-width: 20px 0 0 20px;
+}
+.right::after {
+    right: 32px;
+    border-width: 17.6px 0 0 17.6px;
+    transform: skew(12deg);
+    translate: calc(-50% + 0.2px) 100%;
+}
+
+.center {
+    text-align: center;
+    transform: translate(-50%, -100%);
+}
+.center::before {
+    left: 50%;
+    border-width: 20px 10px 0 10px;
+    translate: -50% 100%;
+}
+.center::after {
+    left: 50%;
+    border-width: 17.8px 8.9px 0 8.9px;
+    translate: -50% 100%;
+}
+
+@keyframes speechBubbleShake {
+    0% {
+        transform: rotate(0deg);
+    }
+    20% {
+        transform: rotate(-2deg);
+    }
+    40% {
+        transform: rotate(2deg);
+    }
+    60% {
+        transform: rotate(-1deg);
+    }
+
+    80% {
+        transform: rotate(1deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+.shake {
+    animation: speechBubbleShake 700ms ease-in-out 1;
+}
+.container {
+    transform-origin: center;
+}

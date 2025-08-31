@@ -1,0 +1,54 @@
+.speech_bubble2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    scale: var(--actual-marker-scale);
+    transform: translate(0, -50%);
+    font-family: var(--font-zen-maru-gothic);
+}
+.speech_bubble2::before {
+    content: "";
+    width: 30px;
+    height: 1px;
+    transform: rotate(60deg);
+    box-sizing: border-box;
+    background-color: var(--foreground);
+}
+.speech_bubble2::after {
+    content: "";
+    width: 30px;
+    height: 1px;
+    transform: rotate(-60deg);
+    box-sizing: border-box;
+    background-color: var(--foreground);
+}
+
+@keyframes speechBubbleShake {
+    0% {
+        transform: rotate(0deg);
+    }
+    20% {
+        transform: rotate(-2deg);
+    }
+    40% {
+        transform: rotate(2deg);
+    }
+    60% {
+        transform: rotate(-1deg);
+    }
+
+    80% {
+        transform: rotate(1deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+.shake {
+    animation: speechBubbleShake 700ms ease-in-out 1;
+}
+.container {
+    transform-origin: center;
+}

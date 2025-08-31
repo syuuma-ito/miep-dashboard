@@ -1,0 +1,5 @@
+.image {
+    width: 4rem;
+    height: auto;
+    transform: scale(var(--actual-marker-scale));
+}

@@ -1,0 +1,77 @@
+{
+    "langName": "日本語",
+    "locale": "ja-JP",
+    "metadata": {
+        "title": "みえっぷ | “三重がみえる” デジタル観光マップ",
+        "description": "みえっぷ | 三重大生が作った!! “三重がみえる” デジタル観光マップ",
+        "keywords": "三重, 三重県, 観光, デジタル観光マップ, 観光マップ"
+    },
+    "debug": {
+        "map": {
+            "info": "デバッグ用",
+            "zoom": "拡大率",
+            "latitude": "緯度",
+            "longitude": "経度"
+        }
+    },
+    "alt": {
+        "mapControls": {
+            "zoomIn": "ズームイン",
+            "zoomOut": "ズームアウト",
+            "resetNorth": "北を上に",
+            "locate": "現在地を表示"
+        },
+        "marker": {
+            "icon": "観光スポットのアイコン"
+        },
+        "logo": "ロゴ"
+    },
+    "navigation": {
+        "title": "ナビゲーションメニュー",
+        "map": "マップ",
+        "about": "このサイトについて"
+    },
+    "search": {
+        "title": "検索メニュー",
+        "placeholder": "検索・絞り込み",
+        "label": "検索ワード",
+        "tagSelector": {
+            "title": "タグで絞り込み",
+            "selected": "選択されているタグ",
+            "all": "すべてのタグ"
+        },
+        "button": "検索",
+        "clear": "クリア",
+        "filtersClearedMessage": "フィルターをクリアしました",
+        "results": "検索結果 {{count}} 件",
+        "noResults": "該当するスポットが見つかりませんでした"
+    },
+    "searchInfo": {
+        "title": "フィルター中",
+        "query": "検索ワード",
+        "tags": "選択中のタグ"
+    },
+    "spotDetail": {
+        "recommendedFor": "こんな人におすすめ！",
+        "nearbyRecommendations": "近くのおすすめスポット",
+        "links": "リンク",
+        "officialSite": "公式サイト",
+        "twitter": "X (Twitter)",
+        "x": "X (Twitter)",
+        "instagram": "Instagram",
+        "youtube": "YouTube",
+        "facebook": "Facebook"
+    },
+    "loading": {
+        "message": "ロード中...",
+        "label": "三重の観光スポットを探しにいってます...",
+        "locating": "現在地を取得中..."
+    },
+    "error": {
+        "noMap": "地図が読み込まれていません",
+        "geolocationFailed": "現在地の取得に失敗しました",
+        "geolocationDenied": "位置情報の利用が許可されていません",
+        "geolocationUnavailable": "位置情報を取得できませんでした",
+        "geolocationTimeout": "位置情報の取得がタイムアウトしました"
+    }
+}
