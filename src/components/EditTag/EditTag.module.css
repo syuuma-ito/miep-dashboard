@@ -1,0 +1,33 @@
+.card {
+    max-width: 500px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.formGroup {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.formGroup label {
+    width: 120px;
+}
+
+.formGroup input {
+    flex: 1;
+}
+
+.errorMessage {
+    margin-left: 124px;
+}
+
+.cardFooter {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}

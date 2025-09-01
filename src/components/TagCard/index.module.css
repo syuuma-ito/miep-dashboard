@@ -1,0 +1,16 @@
+.tagCard {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border);
+    padding: 1rem;
+    border-radius: 1rem;
+    font-size: 1.25rem;
+}
+
+.tagColor {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 4px;
+    display: inline-block;
+    margin-right: 1rem;
+}

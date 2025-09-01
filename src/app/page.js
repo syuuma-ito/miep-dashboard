@@ -55,9 +55,7 @@ export default function Home({ params }) {
             <div className="w-1/2">
                 <h1>タグ一覧</h1>
                 {tags.map((tag) => (
-                    <Link key={tag.id} href={`/tags?id=${tag.id}`}>
-                        <Tag name={tag.name} color={tag.color} />
-                    </Link>
+                    <Tag key={tag.id} name={tag.name} color={tag.color} />
                 ))}
             </div>
         </>
