@@ -11,7 +11,7 @@ import { getAllSpotsByLang } from "@/lib/supabase/getAllSpots";
 import { getAllTagsByLang } from "@/lib/supabase/getAllTags";
 import { filterTextByLang, resolveSpotRefs } from "@/utils/spot";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
@@ -19,7 +19,7 @@ import { useSearchParams } from "next/navigation";
 
 import style from "./page.module.css";
 
-export default function Page() {
+const TouristSpotsPage = () => {
     const { supabase, user, loading } = useAuth();
 
     const searchParams = useSearchParams();
@@ -196,5 +196,13 @@ export default function Page() {
                 </AlertDialogContent>
             </AlertDialog>
         </>
+    );
+};
+
+export default function Page() {
+    return (
+        <Suspense>
+            <TouristSpotsPage />
+        </Suspense>
     );
 }
