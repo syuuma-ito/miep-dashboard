@@ -131,11 +131,14 @@ export default function Page() {
     const previewSpot = resolveSpotRefs(filterTextByLang(previewData, previewLang), allTags, allTouristSpots);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div>ロード中...</div>;
+    }
+    if (!touristSpot) {
+        return <div>ロード中...</div>;
     }
 
     if (!id) {
-        return <div>Tourist spot not found</div>;
+        return <div>観光スポットが見つかりません</div>;
     }
 
     if (isError) {

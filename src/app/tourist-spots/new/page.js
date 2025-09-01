@@ -81,7 +81,7 @@ export default function Page() {
     const previewSpot = resolveSpotRefs(filterTextByLang(previewData, previewLang), allTags, allTouristSpots);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div>ロード中...</div>;
     }
 
     return (

@@ -23,8 +23,6 @@ export default function Home({ params }) {
         fetchTags();
     }, []);
 
-    console.log("user:", user);
-
     useEffect(() => {
         const fetchTouristSpots = async () => {
             const spots = await getAllSpotsByLang("ja");
@@ -35,7 +33,7 @@ export default function Home({ params }) {
     }, []);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div>ロード中...</div>;
     }
 
     if (!user) {
