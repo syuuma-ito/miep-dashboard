@@ -1,0 +1,32 @@
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #ccc;
+}
+.header h1 {
+    font-size: 1.5rem;
+}
+
+.spotContainer {
+    width: 50%;
+    padding: 1rem;
+}
+
+.tagContainer {
+    width: 50%;
+    padding: 1rem;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.spacer {
+    height: 4rem;
+}

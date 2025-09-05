@@ -113,7 +113,7 @@ export default function Page() {
     }
 
     return (
-        <div className="h-full">
+        <div className="h-full container mx-auto p-4">
             <ResizablePanelGroup direction="horizontal" className="h-full">
                 <ResizablePanel defaultSize={50} className="h-full">
                     <div className={style.tagListContainer}>
@@ -134,7 +134,7 @@ export default function Page() {
                 </ResizablePanel>
                 <ResizableHandle withHandle />
                 <ResizablePanel defaultSize={50}>
-                    {selectedTag && (
+                    {selectedTag ? (
                         <EditTag //
                             tag={selectedTag}
                             onSave={handleSave}
@@ -143,6 +143,8 @@ export default function Page() {
                             className={style.editTag}
                             isEditing={!!selectedTag.id}
                         />
+                    ) : (
+                        <div className="flex h-full  justify-center text-gray-500 p-4">左のリストから編集するタグを選択するか、新規作成ボタンを押してください。</div>
                     )}
                 </ResizablePanel>
             </ResizablePanelGroup>
