@@ -52,9 +52,15 @@ export function Header({ className }) {
                             </Button>
                         </Link>
 
-                        <Link href="/tags">
+                        <Link href="/tags/">
                             <Button variant="ghost" size="sm">
                                 タグ
+                            </Button>
+                        </Link>
+
+                        <Link href="/decorations/">
+                            <Button variant="ghost" size="sm">
+                                装飾マーカー
                             </Button>
                         </Link>
 
