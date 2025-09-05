@@ -137,7 +137,7 @@ const ErrorMessage = ({ message, className }) =>
         </div>
     ) : null;
 
-export default function EditDecorations({ mapDecoration, onSave, onPreview, onDelete, className, isEdit }) {
+export default function EditDecorations({ mapDecoration, onSave, onPreview, onDelete, className, isEdit, onCancel }) {
     const {
         register,
         control,
@@ -223,7 +223,6 @@ export default function EditDecorations({ mapDecoration, onSave, onPreview, onDe
             <div className={style.header}>
                 <h1 className={style.title}>{isEdit ? "編集" : "新規作成"}</h1>
                 <div className={style.buttonContainer}>
-                    <Button onClick={saveHandler}>{isEdit ? "保存" : "作成"}</Button>
                     {isEdit && (
                         <Button variant="destructive" onClick={deleteHandler}>
                             削除
@@ -355,6 +354,13 @@ export default function EditDecorations({ mapDecoration, onSave, onPreview, onDe
                         </div>
                     </div>
                 )}
+
+                <div className={style.footer}>
+                    <Button onClick={saveHandler}>{isEdit ? "保存" : "作成"}</Button>
+                    <Button variant="outline" onClick={onCancel}>
+                        キャンセル
+                    </Button>
+                </div>
             </div>
             <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
                 <AlertDialogContent>

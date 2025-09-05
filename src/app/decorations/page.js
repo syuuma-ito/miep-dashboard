@@ -145,6 +145,7 @@ export default function Page() {
                             onDelete={onDecorationDelete}
                             onPreview={onDecorationPreview}
                             isEdit={editingDecoration?.id !== undefined}
+                            onCancel={() => setEditingDecoration(null)}
                         />
                     ) : (
                         <div className="flex h-full items-center justify-center text-gray-500 p-4">左の地図から編集する装飾マーカーを選択するか、新規作成ボタンを押してください。</div>
