@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
+import { displayError } from "@/lib/error";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { FiUser } from "react-icons/fi";
@@ -20,7 +21,7 @@ export function Header({ className }) {
             setIsDropdownOpen(false);
         } catch (error) {
             console.log("Error logging out:", error);
-            toast.error("ログアウトに失敗しました");
+            displayError("ログアウトに失敗しました");
         }
     };
 

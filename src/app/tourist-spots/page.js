@@ -7,6 +7,7 @@ import SpotDetail from "@/components/SpotDetail";
 import { Button } from "@/components/ui/button";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { useAuth } from "@/contexts/AuthContext";
+import { displayError } from "@/lib/error";
 import { getAllSpotsByLang } from "@/lib/supabase/getAllSpots";
 import { getAllTagsByLang } from "@/lib/supabase/getAllTags";
 import { filterTextByLang, resolveSpotRefs } from "@/utils/spot";
@@ -97,7 +98,7 @@ const TouristSpotsPage = () => {
         const { error } = await supabase.rpc("update_spot", { p_spot_data: data });
 
         if (error) {
-            toast.error("保存に失敗しました");
+            displayError("保存に失敗しました");
         } else {
             toast.success("保存しました");
         }
@@ -113,7 +114,7 @@ const TouristSpotsPage = () => {
         const { error, data: isDeleted } = await supabase.rpc("delete_spot", { p_spot_id: id });
 
         if (error || !isDeleted) {
-            toast.error("削除に失敗しました");
+            displayError("削除に失敗しました");
         } else {
             toast.success("削除しました");
             router.push("/");

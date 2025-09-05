@@ -6,6 +6,7 @@ import MapPreview from "@/components/Map";
 import SpotDetail from "@/components/SpotDetail";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { useAuth } from "@/contexts/AuthContext";
+import { displayError } from "@/lib/error";
 import { getAllSpotsByLang } from "@/lib/supabase/getAllSpots";
 import { getAllTagsByLang } from "@/lib/supabase/getAllTags";
 import { filterTextByLang, resolveSpotRefs } from "@/utils/spot";
@@ -66,7 +67,7 @@ export default function Page() {
         const { error, data: newId } = await supabase.rpc("create_spot", { p_spot_data: data });
 
         if (error) {
-            toast.error("新規作成に失敗しました");
+            displayError("新規作成に失敗しました");
         } else {
             toast.success("新規作成しました");
             router.push(`/tourist-spots/?id=${newId}`);

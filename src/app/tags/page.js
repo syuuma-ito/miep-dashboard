@@ -5,6 +5,7 @@ import TagCard from "@/components/TagCard";
 import { Button } from "@/components/ui/button";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { useAuth } from "@/contexts/AuthContext";
+import { displayError } from "@/lib/error";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -49,8 +50,7 @@ export default function Page() {
             });
 
             if (error) {
-                console.log(error);
-                toast.error("タグの作成に失敗しました");
+                displayError("タグの作成に失敗しました");
                 return;
             }
             toast.success("タグを作成しました");
@@ -62,8 +62,7 @@ export default function Page() {
             });
 
             if (error) {
-                console.log(error);
-                toast.error("タグの更新に失敗しました");
+                displayError("タグの更新に失敗しました");
                 return;
             }
             toast.success("タグを更新しました");
@@ -74,14 +73,14 @@ export default function Page() {
 
     const handleDelete = async (deletedTag) => {
         if (!deletedTag.id) {
-            toast.error("削除するタグが見つかりません");
+            displayError("削除するタグが見つかりません");
             return;
         }
 
         const { error, data: isDeleted } = await supabase.rpc("delete_tag", { p_tag_id: deletedTag.id });
 
         if (error || !isDeleted) {
-            toast.error("削除に失敗しました");
+            displayError("削除に失敗しました");
         } else {
             toast.success("削除しました");
             setSelectedTag(null);

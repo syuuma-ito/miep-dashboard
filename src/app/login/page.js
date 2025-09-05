@@ -79,12 +79,12 @@ export default function LoginPage() {
         try {
             const { error } = await supabase.auth.signOut();
             if (error) {
-                toast.error("ログアウトに失敗しました");
+                displayError("ログアウトに失敗しました", error);
                 return;
             }
             toast.success("ログアウトしました");
         } catch (err) {
-            toast.error("ログアウトに失敗しました");
+            displayError("ログアウトに失敗しました", err);
         } finally {
             setLoading(false);
         }

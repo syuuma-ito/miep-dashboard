@@ -1,6 +1,6 @@
 "use client";
 
-import { toast } from "sonner";
+import { displayError } from "../error";
 import { supabase } from "./client";
 
 async function getAllSpotsByLang(lang) {
@@ -10,13 +10,13 @@ async function getAllSpotsByLang(lang) {
         });
 
         if (error) {
-            toast.error("データの取得中にエラーが発生しました...時間をおいて再度お試しください。");
+            displayError("データの取得中にエラーが発生しました...時間をおいて再度お試しください。");
             throw error;
         }
 
         return data || [];
     } catch (err) {
-        toast.error("データの取得中にエラーが発生しました...時間をおいて再度お試しください。");
+        displayError("データの取得中にエラーが発生しました...時間をおいて再度お試しください。");
         return [];
     }
 }
