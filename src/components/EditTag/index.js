@@ -27,20 +27,8 @@ const schema = z.object({
             })
             .max(50, { message: "タグ名(日本語)は50文字以内で入力してください" })
             .trim(),
-        en: z
-            .string()
-            .nonempty({
-                message: "タグ名(英語)は必須です",
-            })
-            .max(50, { message: "タグ名(英語)は50文字以内で入力してください" })
-            .trim(),
-        ko: z
-            .string()
-            .nonempty({
-                message: "タグ名(韓国語)は必須です",
-            })
-            .max(50, { message: "タグ名(韓国語)は50文字以内で入力してください" })
-            .trim(),
+        en: z.string().max(50, { message: "タグ名(英語)は50文字以内で入力してください" }).trim(),
+        ko: z.string().max(50, { message: "タグ名(韓国語)は50文字以内で入力してください" }).trim(),
     }),
 });
 

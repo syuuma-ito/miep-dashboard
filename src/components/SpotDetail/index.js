@@ -56,7 +56,7 @@ const SpotDetail = ({ spot, lang }) => {
                         <h3 className={style.nearby_recommendations_title}>{t("spotDetail.nearbyRecommendations")}</h3>
                         <ul>
                             {spot.nearby_recommendations.map((spot, index) => (
-                                <li key={index} className={style.nearby_recommendation_item} onClick={() => setActiveSpotById(spot.id)}>
+                                <li key={index} className={style.nearby_recommendation_item}>
                                     <SpotCard spot={spot} />
                                 </li>
                             ))}

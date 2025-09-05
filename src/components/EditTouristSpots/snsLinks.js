@@ -12,7 +12,7 @@ import { TbWorld } from "react-icons/tb";
 import ErrorMessage from "./error";
 import style from "./forms.module.css";
 
-const platforms = ["website", "x", "instagram", "facebook", "youtube", "twitter"];
+const platforms = ["website", "x", "instagram", "facebook", "youtube"];
 
 const SnsLinks = ({ control, register, errors, name = "sns_links" }) => {
     const { fields, append, remove } = useFieldArray({

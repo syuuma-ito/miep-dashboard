@@ -83,7 +83,7 @@ export default function EditTouristSpots({ touristSpot, onSave, onPreview, onDel
                 <Description control={control} errors={errors} />
                 <RecommendedFor control={control} errors={errors} />
                 <Info control={control} register={register} errors={errors} name="info" />
-                <NearbyRecommendations control={control} errors={errors} name="nearby_recommendations" />
+                <NearbyRecommendations control={control} errors={errors} name="nearby_recommendations" myId={touristSpot?.id} />
                 <SnsLinks control={control} errors={errors} register={register} name="sns_links" />
             </div>
         </div>

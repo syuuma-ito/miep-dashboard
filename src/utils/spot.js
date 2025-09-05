@@ -1,24 +1,3 @@
-/**
- * 観光地リストのnearby_recommendationsにあるIDを、対応する観光地オブジェクトに置き換える関数
- * @param {Array<Object>} attractions - 観光地オブジェクトのリスト
- * @returns {Array<Object>} IDがオブジェクトに置き換えられた新しいリスト
- */
-const replaceNearbyIdsWithAttractions = (attractions) => {
-    const attractionsMap = attractions.reduce((acc, attraction) => {
-        acc[attraction.id] = attraction;
-        return acc;
-    }, {});
-
-    return attractions.map((attraction) => {
-        const newAttraction = { ...attraction };
-        newAttraction.nearby_recommendations = newAttraction.nearby_recommendations.map((id) => {
-            return attractionsMap[id];
-        });
-
-        return newAttraction;
-    });
-};
-
 const filterTextByLang = (obj, lang) => {
     if (Array.isArray(obj)) {
         return obj.map((item) => filterTextByLang(item, lang));
@@ -29,7 +8,12 @@ const filterTextByLang = (obj, lang) => {
         const keys = Object.keys(obj);
         // すべてのキーが言語コードなら多言語フィールドとみなす
         if (keys.length > 0 && keys.every((k) => langKeys.includes(k))) {
-            return obj[lang] ?? obj["ja"] ?? obj["en"] ?? Object.values(obj)[0];
+            // 指定された言語の値を取得
+            const selectedValue = obj[lang];
+            if (selectedValue && selectedValue !== "") {
+                return selectedValue;
+            }
+            return obj["ja"] ?? obj["en"] ?? Object.values(obj)[0];
         }
         const newObj = {};
         for (const key in obj) {
@@ -82,4 +66,4 @@ const resolveSpotRefs = (spot, allTags = [], allSpot = []) => {
     return newSpot;
 };
 
-export { filterTextByLang, replaceNearbyIdsWithAttractions, resolveSpotRefs };
+export { filterTextByLang, resolveSpotRefs };

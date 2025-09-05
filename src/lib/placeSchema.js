@@ -10,8 +10,8 @@ const minLengthError = (fieldName, min) => `${fieldName}は最低${min}つ以上
 const createMultilingualSchema = (fieldName) =>
     z.object({
         ja: z.string({ required_error: requiredError(`${fieldName}(日本語)`) }).nonempty({ message: nonEmptyError(`${fieldName}(日本語)`) }),
-        en: z.string({ required_error: requiredError(`${fieldName}(英語)`) }).nonempty({ message: nonEmptyError(`${fieldName}(英語)`) }),
-        ko: z.string({ required_error: requiredError(`${fieldName}(韓国語)`) }).nonempty({ message: nonEmptyError(`${fieldName}(韓国語)`) }),
+        en: z.string({ required_error: requiredError(`${fieldName}(英語)`) }),
+        ko: z.string({ required_error: requiredError(`${fieldName}(韓国語)`) }),
     });
 
 // info配列内の各オブジェクトのスキーマ

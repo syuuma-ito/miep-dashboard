@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { FiUser } from "react-icons/fi";
 import { toast } from "sonner";
@@ -12,15 +11,15 @@ export function Header({ className }) {
     const { user, supabase } = useAuth();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
-    const router = useRouter();
 
     const handleLogout = async () => {
         try {
             await supabase.auth.signOut();
+            console.log("User logged out");
             toast.success("ログアウトしました");
             setIsDropdownOpen(false);
-            router.push("/login");
         } catch (error) {
+            console.log("Error logging out:", error);
             toast.error("ログアウトに失敗しました");
         }
     };

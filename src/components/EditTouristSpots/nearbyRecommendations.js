@@ -10,7 +10,7 @@ import style from "./forms.module.css";
 
 import ErrorMessage from "./error";
 
-const NearbyRecommendations = ({ control, errors, name = "nearby_recommendations" }) => {
+const NearbyRecommendations = ({ control, errors, name = "nearby_recommendations", myId }) => {
     const [openIndex, setOpenIndex] = useState(null);
     const [allTouristSpots, setAllTouristSpots] = useState([]);
 
@@ -38,7 +38,7 @@ const NearbyRecommendations = ({ control, errors, name = "nearby_recommendations
             <h2>近くのおすすめスポット</h2>
 
             {fields.map((field, index) => {
-                const availableSpots = allTouristSpots.filter((spot) => !currentValues.includes(spot.id) || currentValues[index] === spot.id);
+                const availableSpots = allTouristSpots.filter((spot) => !currentValues.includes(spot.id) || currentValues[index] === spot.id).filter((spot) => spot.id !== myId);
 
                 return (
                     <div className={style.inputContainer} key={field.id}>

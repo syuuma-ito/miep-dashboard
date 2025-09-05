@@ -63,7 +63,7 @@ export default function Page() {
         const data = pendingSaveData;
         setPendingSaveData(null);
 
-        const { error, data: newId } = await supabase.rpc("upsert_spot", { p_data: data });
+        const { error, data: newId } = await supabase.rpc("create_spot", { p_spot_data: data });
 
         if (error) {
             toast.error("新規作成に失敗しました");
@@ -88,7 +88,7 @@ export default function Page() {
         <>
             <ResizablePanelGroup direction="horizontal" className={style.container}>
                 <ResizablePanel defaultSize={30} className="flex-1 h-full ">
-                    <EditTouristSpots onSave={handleSave} onPreview={handlePreview} title="新規作成" />
+                    <EditTouristSpots onSave={handleSave} onPreview={handlePreview} />
                 </ResizablePanel>
                 <ResizableHandle withHandle />
                 <ResizablePanel defaultSize={70}>

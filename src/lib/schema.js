@@ -42,22 +42,6 @@ const tagSchema = z.object({
     name: z.string().nonempty(),
 });
 
-// 観光地(多言語)スキーマ
-const TouristSpotMultilingualSchema = z.object({
-    id: z.uuid(),
-    name: multilingualSchema,
-    icon: z.url(),
-    images: z.array(z.url()).min(1),
-    latitude: z.coerce.number().min(-90).max(90),
-    longitude: z.coerce.number().min(-180).max(180),
-    description: multilingualSchema,
-    recommended_for: multilingualSchema,
-    tags: z.array(tagMultilingualSchema).default([]),
-    info: z.array(infoItemSpotMultilingualSchema).default([]),
-    nearby_recommendations: z.array(z.uuid()).default([]),
-    sns_links: snsLinksSchema.default([]),
-});
-
 // 観光地(特定の言語)スキーマ
 const TouristSpotSchema = z.object({
     id: z.uuid(),
@@ -70,9 +54,56 @@ const TouristSpotSchema = z.object({
     recommended_for: z.string().nonempty(),
     tags: z.array(tagSchema).default([]),
     info: z.array(infoItemSchema).default([]),
-    nearby_recommendations: z.array(z.uuid()).default([]),
+    nearby_recommendations: z
+        .array(
+            z.object({
+                id: z.uuid(),
+                name: z.string().nonempty(),
+                icon: z.url(),
+                tags: z.array(tagSchema).default([]),
+            })
+        )
+        .default([]),
     sns_links: snsLinksSchema.default([]),
 });
+
+// 観光地(多言語)スキーマ
+const TouristSpotMultilingualSchema = z.object({
+    id: z.uuid(),
+    name: multilingualSchema,
+    icon: z.url(),
+    images: z.array(z.url()).min(1),
+    latitude: z.coerce.number().min(-90).max(90),
+    longitude: z.coerce.number().min(-180).max(180),
+    description: multilingualSchema,
+    recommended_for: multilingualSchema,
+    tags: z.array(tagMultilingualSchema).default([]),
+    info: z.array(infoItemSpotMultilingualSchema).default([]),
+    nearby_recommendations: z
+        .array(
+            z.object({
+                id: z.uuid(),
+                name: multilingualSchema,
+                icon: z.url(),
+                tags: z.array(tagMultilingualSchema).default([]),
+            })
+        )
+        .default([]),
+    sns_links: snsLinksSchema.default([]),
+});
+
+// 地図表示に必要な観光地リスト(特定の言語)スキーマ
+const TouristSpotListSchema = z
+    .array(
+        z.object({
+            id: z.uuid(),
+            name: z.string().nonempty(),
+            icon: z.url(),
+            latitude: z.coerce.number().min(-90).max(90),
+            longitude: z.coerce.number().min(-180).max(180),
+        })
+    )
+    .default([]);
 
 // マップ装飾(多言語)スキーマ
 const mapDecorationMultilingualSchema = z.object({

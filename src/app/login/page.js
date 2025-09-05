@@ -68,7 +68,6 @@ export default function LoginPage() {
             toast.success("ログインしました");
             router.push("/");
         } catch (error) {
-            console.error("Login error:", error);
             toast.error("ログインに失敗しました。しばらく時間をおいて再度お試しください");
         } finally {
             setLoading(false);
@@ -85,7 +84,6 @@ export default function LoginPage() {
             }
             toast.success("ログアウトしました");
         } catch (err) {
-            console.error("Logout error:", err);
             toast.error("ログアウトに失敗しました");
         } finally {
             setLoading(false);

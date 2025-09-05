@@ -26,7 +26,7 @@ export default function Page() {
     }, [loading, user, router]);
 
     const fetchTags = useCallback(async () => {
-        const { data, error } = await supabase.rpc("get_all_tags");
+        const { data, error } = await supabase.rpc("get_all_tags_all_langs");
 
         if (error) {
             setIsError(true);
@@ -43,12 +43,30 @@ export default function Page() {
     const handleSave = async (updatedTag) => {
         const isNewTag = !updatedTag.id;
 
-        const { data, error } = await supabase.rpc("upsert_tag", { p_data: updatedTag });
+        if (isNewTag) {
+            const { data: newTagId, error } = await supabase.rpc("create_tag", {
+                p_tag_data: updatedTag,
+            });
 
-        if (error) {
-            toast.error("保存に失敗しました");
+            if (error) {
+                console.log(error);
+                toast.error("タグの作成に失敗しました");
+                return;
+            }
+            toast.success("タグを作成しました");
+            setSelectedTag(null);
+            await fetchTags();
         } else {
-            toast.success(isNewTag ? "新規作成しました" : "保存しました");
+            const { error } = await supabase.rpc("update_tag", {
+                p_tag_data: updatedTag,
+            });
+
+            if (error) {
+                console.log(error);
+                toast.error("タグの更新に失敗しました");
+                return;
+            }
+            toast.success("タグを更新しました");
             setSelectedTag(null);
             await fetchTags();
         }
@@ -60,9 +78,9 @@ export default function Page() {
             return;
         }
 
-        const { error } = await supabase.rpc("delete_tag_by_id", { p_tag_id: deletedTag.id });
+        const { error, data: isDeleted } = await supabase.rpc("delete_tag", { p_tag_id: deletedTag.id });
 
-        if (error) {
+        if (error || !isDeleted) {
             toast.error("削除に失敗しました");
         } else {
             toast.success("削除しました");
@@ -78,7 +96,6 @@ export default function Page() {
                 en: "",
                 ko: "",
             },
-            description: "",
             color: "#3b82f6",
         };
         setSelectedTag(newTag);

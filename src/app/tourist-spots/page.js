@@ -65,7 +65,7 @@ const TouristSpotsPage = () => {
     useEffect(() => {
         if (!supabase || !id) return;
         const fetchTouristSpot = async () => {
-            const { data, error } = await supabase.rpc("get_spot_by_id", { p_spot_id: id });
+            const { data, error } = await supabase.rpc("get_spot_detail_all_langs", { p_spot_id: id });
 
             if (error) {
                 setIsError(true);
@@ -94,8 +94,7 @@ const TouristSpotsPage = () => {
         const data = pendingSaveData;
         setPendingSaveData(null);
 
-        console.log("Saving data:", data);
-        const { error } = await supabase.rpc("upsert_spot", { p_data: data });
+        const { error } = await supabase.rpc("update_spot", { p_spot_data: data });
 
         if (error) {
             toast.error("保存に失敗しました");
@@ -104,18 +103,16 @@ const TouristSpotsPage = () => {
         }
     }, [pendingSaveData, supabase]);
 
-    // Open confirmation dialog for delete
     const handleDelete = useCallback(() => {
         setDeleteConfirmOpen(true);
     }, []);
 
-    // Perform actual delete after confirmation
     const performDelete = useCallback(async () => {
         setDeleteConfirmOpen(false);
         if (!id || !supabase) return;
-        const { error } = await supabase.rpc("delete_spot_by_id", { p_spot_id: id });
+        const { error, data: isDeleted } = await supabase.rpc("delete_spot", { p_spot_id: id });
 
-        if (error) {
+        if (error || !isDeleted) {
             toast.error("削除に失敗しました");
         } else {
             toast.success("削除しました");
