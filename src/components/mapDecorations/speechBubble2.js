@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import style from "./speechBubble2.module.css";
 
-export default function SpeechBubble2({ text }) {
+export default function SpeechBubble2({ text, onClick, preview, size = 1 }) {
     const containerRef = useRef(null);
     const timeoutRef = useRef(null);
 
@@ -29,9 +29,11 @@ export default function SpeechBubble2({ text }) {
     if (!text) return null;
 
     return (
-        <div ref={containerRef} className={style.container}>
-            <div className={`${style.speech_bubble2}`}>
-                <span>{text}</span>
+        <div style={{ transform: `scale(${size})` }}>
+            <div ref={containerRef} className={style.container}>
+                <div className={`${style.speech_bubble2} ${preview ? style.preview : ""}`} onClick={onClick}>
+                    <span>{text}</span>
+                </div>
             </div>
         </div>
     );

@@ -9,7 +9,7 @@ import LoadingOverlay from "./loading";
 
 import { memo } from "react";
 
-const MapPreview = ({ touristSpot, mapDecorations }) => {
+const MapPreview = ({ touristSpot, mapDecorations, onDecorationClick }) => {
     const [loading, setLoading] = useState(true);
     const [mapInfo, setMapInfo] = useState({ zoom: 10, center: [0, 0] });
 
@@ -25,7 +25,7 @@ const MapPreview = ({ touristSpot, mapDecorations }) => {
         <div className={styles.container}>
             <LoadingOverlay loading={loading} />
 
-            <Map touristSpot={touristSpot} mapDecorations={mapDecorations} onLoad={handleMapLoad} onMapInfoChange={handleMapInfoChange} />
+            <Map touristSpot={touristSpot} mapDecorations={mapDecorations} onLoad={handleMapLoad} onMapInfoChange={handleMapInfoChange} onDecorationClick={onDecorationClick} />
             <MapOverlay mapInfo={mapInfo} />
         </div>
     );

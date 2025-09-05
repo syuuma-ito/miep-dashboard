@@ -3,3 +3,7 @@
     height: auto;
     transform: scale(var(--actual-marker-scale));
 }
+
+.preview {
+    border: 2px dashed red;
+}

@@ -52,3 +52,7 @@
 .container {
     transform-origin: center;
 }
+
+.preview {
+    border: 2px dashed red;
+}

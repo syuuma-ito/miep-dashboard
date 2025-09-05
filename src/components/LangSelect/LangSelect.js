@@ -15,9 +15,9 @@ const getLangName = (lang) => {
 
 const languages = ["en", "ja", "ko"];
 
-const LangSelect = ({ lang, setLang }) => {
+const LangSelect = ({ lang, setLang, className }) => {
     return (
-        <div className={style.langSelect}>
+        <div className={`${style.langSelect} ${className}`}>
             <p>Language</p>
             <Select defaultValue={lang} onValueChange={setLang}>
                 <SelectTrigger>

@@ -1,0 +1,71 @@
+.main {
+    margin: 1rem;
+}
+
+.header {
+    position: sticky;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    top: 0;
+    background: var(--background);
+    z-index: 10;
+    padding: 1rem;
+}
+
+.buttonContainer {
+    display: flex;
+    gap: 8px;
+}
+.editorContainer {
+    margin-top: 12px;
+    flex: 1 1 auto;
+    overflow: auto;
+    width: 100%;
+}
+
+.inputContainer {
+    margin: 1rem;
+}
+.inputContainer p {
+    margin-right: 1rem;
+    width: 120px;
+    text-align: right;
+}
+
+.editorContainer h2 {
+    font-size: 1.5rem;
+}
+
+.editorContainer h3 {
+    margin: 1rem 0 1rem 120px;
+    font-size: 1.25rem;
+}
+
+.editorContainer hr {
+    margin: 1rem 0;
+    border: 1px solid var(--border);
+}
+.section {
+    margin: 2rem 0;
+}
+
+.inputContainer {
+    margin: 1rem 0;
+}
+.inputWithLabel {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 1rem 0 0;
+}
+
+.inputWithLabel label {
+    margin-right: 1rem;
+    width: 80px;
+    text-align: right;
+}
+
+.errorMessage {
+    margin-left: 80px;
+}

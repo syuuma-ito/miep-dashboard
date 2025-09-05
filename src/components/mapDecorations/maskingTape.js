@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import style from "./maskingTape.module.css";
 
-export default function MaskingTape({ text }) {
+export default function MaskingTape({ text, onClick, preview, size = 1 }) {
     const containerRef = useRef(null);
     const timeoutRef = useRef(null);
 
@@ -29,10 +29,12 @@ export default function MaskingTape({ text }) {
     if (!text) return null;
 
     return (
-        <div className={style.container} ref={containerRef}>
-            <div className={style.maskingTape}>
-                <div className={style.text}>{text}</div>
-                <span className={style.ornament}></span>
+        <div style={{ transform: `scale(${size})` }}>
+            <div className={style.container} ref={containerRef}>
+                <div className={`${style.maskingTape} ${preview ? style.preview : ""}`} onClick={onClick}>
+                    <div className={style.text}>{text}</div>
+                    <span className={style.ornament}></span>
+                </div>
             </div>
         </div>
     );

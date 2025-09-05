@@ -2,7 +2,7 @@ import { getTextColor } from "@/utils/colorUtils";
 import { useEffect, useRef } from "react";
 import style from "./speechBubble1.module.css";
 
-export default function SpeechBubble1({ text, bgColor = "#fff", arrowPosition = "right" }) {
+export default function SpeechBubble1({ text, bgColor = "#fff", arrowPosition = "right", onClick, preview, size = 1 }) {
     const textColor = getTextColor(bgColor);
     const containerRef = useRef(null);
     const timeoutRef = useRef(null);
@@ -31,9 +31,15 @@ export default function SpeechBubble1({ text, bgColor = "#fff", arrowPosition = 
     if (!text) return null;
 
     return (
-        <div ref={containerRef} className={style.container}>
-            <div className={`${style.speech_bubble} ${style[arrowPosition]}`} style={{ "--SpeechBubble1-background": bgColor, "--SpeechBubble1-color": textColor }}>
-                <span>{text}</span>
+        <div style={{ transform: `scale(${size})` }}>
+            <div ref={containerRef} className={style.container}>
+                <div
+                    className={`${style.speech_bubble} ${style[arrowPosition]} ${preview ? style.preview : ""}`}
+                    style={{ "--SpeechBubble1-background": bgColor, "--SpeechBubble1-color": textColor }}
+                    onClick={onClick}
+                >
+                    <span>{text}</span>
+                </div>
             </div>
         </div>
     );

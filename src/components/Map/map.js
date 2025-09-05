@@ -20,7 +20,7 @@ function getScale(zoom, baseZoom = 10) {
     return Math.min(Math.pow(2, zoom - baseZoom), 1);
 }
 
-const Map = ({ touristSpot = null, mapDecorations = [], onLoad, onMapInfoChange }) => {
+const Map = ({ touristSpot = null, mapDecorations = [], onLoad, onMapInfoChange, onDecorationClick }) => {
     const lang = "ja";
 
     const mapContainer = useRef(null);
@@ -138,18 +138,35 @@ const Map = ({ touristSpot = null, mapDecorations = [], onLoad, onMapInfoChange 
             mapDecorations.forEach((mapDecoration) => {
                 const markerElement = document.createElement("div");
                 markerElement.className = "map-pin";
-                markerElement.style.pointerEvents = "none";
 
                 const root = createRoot(markerElement);
                 const renderMarker = () => {
                     if (mapDecoration.type === "MaskingTape") {
-                        root.render(<MaskingTape text={mapDecoration.options.text} />);
+                        root.render(
+                            <MaskingTape text={mapDecoration.options.text} onClick={() => onDecorationClick(mapDecoration.id)} preview={mapDecoration.isPreview} size={mapDecoration.options.size} />
+                        );
                     } else if (mapDecoration.type === "SpeechBubble1") {
-                        root.render(<SpeechBubble1 text={mapDecoration.options.text} arrowPosition={mapDecoration.options.arrowPosition} />);
+                        root.render(
+                            <SpeechBubble1
+                                text={mapDecoration.options.text}
+                                arrowPosition={mapDecoration.options.arrowPosition}
+                                onClick={() => onDecorationClick(mapDecoration.id)}
+                                preview={mapDecoration.isPreview}
+                                size={mapDecoration.options.size}
+                            />
+                        );
                     } else if (mapDecoration.type === "SpeechBubble2") {
-                        root.render(<SpeechBubble2 text={mapDecoration.options.text} />);
-                    } else if (mapDecoration.type === "image") {
-                        root.render(<ImagePin src={mapDecoration.options.src} alt={mapDecoration.options.alt} size={mapDecoration.options.size} />);
+                        root.render(
+                            <SpeechBubble2 text={mapDecoration.options.text} onClick={() => onDecorationClick(mapDecoration.id)} preview={mapDecoration.isPreview} size={mapDecoration.options.size} />
+                        );
+                    } else if (mapDecoration.type === "Image") {
+                        root.render(
+                            <ImagePin src={mapDecoration.options.src} size={mapDecoration.options.size} onClick={() => onDecorationClick(mapDecoration.id)} preview={mapDecoration.isPreview} />
+                        );
+                    }
+
+                    if (mapDecoration.isPreview) {
+                        map.current.flyTo({ center: [mapDecoration.longitude, mapDecoration.latitude], zoom: 10 });
                     }
                 };
 
