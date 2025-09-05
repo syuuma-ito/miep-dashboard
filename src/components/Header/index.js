@@ -16,11 +16,9 @@ export function Header({ className }) {
     const handleLogout = async () => {
         try {
             await supabase.auth.signOut();
-            console.log("User logged out");
             toast.success("ログアウトしました");
             setIsDropdownOpen(false);
         } catch (error) {
-            console.log("Error logging out:", error);
             displayError("ログアウトに失敗しました");
         }
     };
