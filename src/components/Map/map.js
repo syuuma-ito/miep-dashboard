@@ -20,12 +20,12 @@ function getScale(zoom, baseZoom = 10) {
     return Math.min(Math.pow(2, zoom - baseZoom), 1);
 }
 
-const Map = ({ touristSpots = [], mapDecorations = [], onLoad, onMapInfoChange }) => {
+const Map = ({ touristSpot = null, mapDecorations = [], onLoad, onMapInfoChange }) => {
     const lang = "ja";
 
     const mapContainer = useRef(null);
     const map = useRef(null);
-    const [touristSpotMarkers, setTouristSpotMarkers] = useState([]);
+    const [touristSpotMarker, setTouristSpotMarker] = useState(null);
     const [mapDecorationsMarkers, setMapDecorationsMarkers] = useState([]);
 
     useEffect(() => {
@@ -87,27 +87,28 @@ const Map = ({ touristSpots = [], mapDecorations = [], onLoad, onMapInfoChange }
         if (!map.current) return;
 
         const addTouristSpotMarkers = () => {
-            if (touristSpots.length === 0) return;
+            if (!touristSpot) return;
 
-            touristSpotMarkers.forEach((marker) => marker.remove());
-            setTouristSpotMarkers([]);
+            touristSpotMarker?.remove();
+            setTouristSpotMarker(null);
 
-            touristSpots.forEach((spot) => {
-                const markerElement = document.createElement("div");
-                markerElement.className = "tourist-spot-marker";
-                markerElement.style.pointerEvents = "none";
+            const spot = touristSpot;
+            const markerElement = document.createElement("div");
+            markerElement.className = "tourist-spot-marker";
+            markerElement.style.pointerEvents = "none";
 
-                const root = createRoot(markerElement);
-                const renderMarker = () => {
-                    root.render(<Marker spot={spot} />);
-                };
+            const root = createRoot(markerElement);
+            const renderMarker = () => {
+                root.render(<Marker spot={spot} />);
+            };
 
-                renderMarker();
-                spot.renderMarker = renderMarker;
+            renderMarker();
+            spot.renderMarker = renderMarker;
 
-                const marker = new maplibregl.Marker({ element: markerElement }).setLngLat([spot.longitude, spot.latitude]).addTo(map.current);
-                setTouristSpotMarkers((prevMarkers) => [...prevMarkers, marker]);
-            });
+            map.current.flyTo({ center: [spot.longitude, spot.latitude], zoom: 10 });
+
+            const marker = new maplibregl.Marker({ element: markerElement }).setLngLat([spot.longitude, spot.latitude]).addTo(map.current);
+            setTouristSpotMarker(marker);
         };
 
         if (map.current.loaded()) {
@@ -122,7 +123,7 @@ const Map = ({ touristSpots = [], mapDecorations = [], onLoad, onMapInfoChange }
             }
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [touristSpots, lang]);
+    }, [touristSpot, lang]);
 
     // 装飾マーカーを追加
     useEffect(() => {

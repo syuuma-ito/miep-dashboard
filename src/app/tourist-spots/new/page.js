@@ -100,7 +100,7 @@ export default function Page() {
                         </div>
 
                         <ResizablePanelGroup direction="horizontal">
-                            <ResizablePanel defaultSize={70}>{previewData && <MapPreview touristSpots={[filterTextByLang(previewData, previewLang)]} />}</ResizablePanel>
+                            <ResizablePanel defaultSize={70}>{previewData && <MapPreview touristSpots={filterTextByLang(previewData, previewLang)} />}</ResizablePanel>
                             <ResizableHandle withHandle />
                             <ResizablePanel defaultSize={30}>
                                 <div className="flex-1 h-full ">{previewData && <SpotDetail spot={previewSpot} lang={previewLang} />}</div>
