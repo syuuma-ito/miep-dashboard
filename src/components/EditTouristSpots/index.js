@@ -25,6 +25,7 @@ export default function EditTouristSpots({ touristSpot, onSave, onPreview, onDel
         handleSubmit,
         watch,
         reset,
+        setValue,
         formState: { errors },
     } = useForm({
         resolver: zodResolver(placeSchema),
@@ -76,8 +77,8 @@ export default function EditTouristSpots({ touristSpot, onSave, onPreview, onDel
             </div>
             <div className={style.editorContainer}>
                 <SpotsName register={register} errors={errors} />
-                <IconUrl register={register} errors={errors} />
-                <ImageUrls register={register} errors={errors} control={control} />
+                <IconUrl register={register} errors={errors} setValue={setValue} />
+                <ImageUrls register={register} errors={errors} control={control} setValue={setValue} />
                 <Location register={register} errors={errors} />
                 <TagSelector control={control} name="tags" errors={errors} />
                 <Description control={control} errors={errors} />

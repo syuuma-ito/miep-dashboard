@@ -1,0 +1,50 @@
+/* 画像アイコンのスタイル */
+.imageIcon {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid hsl(var(--border));
+    user-select: none;
+    pointer-events: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+/* ファイルアイコンのスタイル */
+.fileIcon {
+    width: 48px;
+    height: 48px;
+    user-select: none;
+    pointer-events: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .imageIcon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .fileIcon {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    .imageIcon {
+        width: 32px;
+        height: 32px;
+    }
+
+    .fileIcon {
+        width: 32px;
+        height: 32px;
+    }
+}
