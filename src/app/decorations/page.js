@@ -122,6 +122,11 @@ export default function Page() {
         });
     }, []);
 
+    const handleCancel = useCallback(() => {
+        setEditingDecoration(null);
+        setDisplayMapDecorations(allMapDecorations);
+    }, [allMapDecorations]);
+
     const filteredMapDecorations = useMemo(() => {
         return extractDecorationsByLanguage(displayMapDecorations, previewLang);
     }, [displayMapDecorations, previewLang]);
@@ -145,7 +150,7 @@ export default function Page() {
                             onDelete={onDecorationDelete}
                             onPreview={onDecorationPreview}
                             isEdit={editingDecoration?.id !== undefined}
-                            onCancel={() => setEditingDecoration(null)}
+                            onCancel={() => handleCancel()}
                         />
                     ) : (
                         <div className="flex h-full items-center justify-center text-gray-500 p-4">左の地図から編集する装飾マーカーを選択するか、新規作成ボタンを押してください。</div>

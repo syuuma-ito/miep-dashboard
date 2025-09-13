@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import Description from "./description";
 import IconUrl from "./iconUrl";
@@ -45,9 +45,15 @@ export default function EditTouristSpots({ touristSpot, onSave, onPreview, onDel
         },
     });
 
+    const isFirstRenderRef = useRef(true);
+    const skipNextAutoPreviewRef = useRef(false);
+    const autoPreviewTimerRef = useRef(null);
+
     useEffect(() => {
         if (touristSpot) {
             reset(touristSpot);
+            // 親からのリセット直後は自動プレビューを一度スキップ
+            skipNextAutoPreviewRef.current = true;
         }
     }, [touristSpot, reset]);
 
@@ -58,6 +64,36 @@ export default function EditTouristSpots({ touristSpot, onSave, onPreview, onDel
     const previewHandler = handleSubmit((data) => {
         if (onPreview) onPreview(data);
     });
+
+    // 入力停止後0.5秒で自動プレビュー（初回・reset直後はスキップ）。
+    // watch の購読で実際の値変更時のみタイマーを起動する。
+    useEffect(() => {
+        const subscription = watch(() => {
+            // 初回（マウント直後）のイベントはスキップ
+            if (isFirstRenderRef.current) {
+                isFirstRenderRef.current = false;
+                return;
+            }
+            // reset による直後の一度はスキップ
+            if (skipNextAutoPreviewRef.current) {
+                skipNextAutoPreviewRef.current = false;
+                return;
+            }
+            if (!onPreview) return;
+
+            if (autoPreviewTimerRef.current) {
+                clearTimeout(autoPreviewTimerRef.current);
+            }
+            autoPreviewTimerRef.current = setTimeout(() => {
+                handleSubmit((data) => onPreview(data))();
+            }, 500);
+        });
+
+        return () => {
+            subscription?.unsubscribe?.();
+            if (autoPreviewTimerRef.current) clearTimeout(autoPreviewTimerRef.current);
+        };
+    }, [watch, onPreview, handleSubmit]);
 
     return (
         <div className={style.main}>
@@ -70,9 +106,6 @@ export default function EditTouristSpots({ touristSpot, onSave, onPreview, onDel
                             削除
                         </Button>
                     )}
-                    <Button variant="outline" onClick={previewHandler}>
-                        プレビュー
-                    </Button>
                 </div>
             </div>
             <div className={style.editorContainer}>

@@ -28,7 +28,9 @@ const infoItemSchema = z.object({
 const snsLinksSchema = z
     .array(
         z.object({
-            platform: z.enum(["website", "x", "instagram", "facebook", "youtube", "twitter"]),
+            platform: z.enum(["website", "x", "instagram", "facebook", "youtube", "twitter"], {
+                message: invalidFormatError("SNSリンク", "プラットフォーム"),
+            }),
             url: z.url({ message: invalidFormatError("SNSリンク", "URL") }),
         })
     )

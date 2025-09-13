@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 import style from "./index.module.css";
@@ -165,6 +165,8 @@ export default function EditDecorations({ mapDecoration, onSave, onPreview, onDe
     const [isFilePickerOpen, setIsFilePickerOpen] = useState(false);
 
     const watchedType = watch("type");
+    // 自動プレビュー用タイマー
+    const autoPreviewTimerRef = useRef(null);
 
     useEffect(() => {
         if (mapDecoration) {
@@ -204,6 +206,26 @@ export default function EditDecorations({ mapDecoration, onSave, onPreview, onDe
         if (onPreview) onPreview(data);
     });
 
+    // 入力停止後0.5秒で自動プレビュー
+    // watch の購読を使い、実際のフォーム値変更時のみタイマーを起動する。
+    useEffect(() => {
+        const subscription = watch(() => {
+            if (!onPreview) return;
+
+            if (autoPreviewTimerRef.current) {
+                clearTimeout(autoPreviewTimerRef.current);
+            }
+            autoPreviewTimerRef.current = setTimeout(() => {
+                handleSubmit((data) => onPreview(data))();
+            }, 500);
+        });
+
+        return () => {
+            subscription?.unsubscribe?.();
+            if (autoPreviewTimerRef.current) clearTimeout(autoPreviewTimerRef.current);
+        };
+    }, [watch, onPreview, handleSubmit]);
+
     const performSave = () => {
         if (onSave && validatedData) {
             onSave(validatedData);
@@ -241,9 +263,6 @@ export default function EditDecorations({ mapDecoration, onSave, onPreview, onDe
                             削除
                         </Button>
                     )}
-                    <Button variant="outline" onClick={previewHandler}>
-                        プレビュー
-                    </Button>
                 </div>
             </div>
             <div className={style.editorContainer}>
