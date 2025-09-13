@@ -138,7 +138,7 @@ const ErrorMessage = ({ message, className }) =>
         </div>
     ) : null;
 
-export default function EditDecorations({ mapDecoration, onSave, onPreview, onDelete, className, isEdit, onCancel }) {
+export default function EditDecorations({ mapDecoration, onSave, onPreview, onDelete, className, isEdit, onCancel, onDirtyChange }) {
     const {
         register,
         control,
@@ -146,7 +146,7 @@ export default function EditDecorations({ mapDecoration, onSave, onPreview, onDe
         watch,
         reset,
         setValue,
-        formState: { errors },
+        formState: { errors, isDirty },
     } = useForm({
         resolver: zodResolver(schema),
         mode: "onChange",
@@ -191,6 +191,13 @@ export default function EditDecorations({ mapDecoration, onSave, onPreview, onDe
             });
         }
     }, [watchedType, setValue, mapDecoration]);
+
+    // フォーム未保存状態の変化を親へ通知
+    useEffect(() => {
+        if (typeof onDirtyChange === "function") {
+            onDirtyChange(!!isDirty);
+        }
+    }, [isDirty, onDirtyChange]);
 
     const saveHandler = handleSubmit((data) => {
         setValidatedData(data);

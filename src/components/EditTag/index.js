@@ -39,14 +39,14 @@ const ErrorMessage = ({ message, className }) =>
         </p>
     ) : null;
 
-export default function EditTag({ tag, onSave, isEditing, onCancel, onDelete, className }) {
+export default function EditTag({ tag, onSave, isEditing, onCancel, onDelete, className, onDirtyChange }) {
     const {
         register,
         control,
         handleSubmit,
         watch,
         reset,
-        formState: { errors },
+        formState: { errors, isDirty },
     } = useForm({
         resolver: zodResolver(schema),
         mode: "onChange",
@@ -65,6 +65,13 @@ export default function EditTag({ tag, onSave, isEditing, onCancel, onDelete, cl
             reset(tag);
         }
     }, [tag, reset]);
+
+    // フォーム未保存状態の変化を親へ通知
+    useEffect(() => {
+        if (typeof onDirtyChange === "function") {
+            onDirtyChange(!!isDirty);
+        }
+    }, [isDirty, onDirtyChange]);
 
     const saveHandler = handleSubmit((data) => {
         setValidatedData(data);

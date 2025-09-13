@@ -31,6 +31,9 @@ export default function Page() {
 
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [pendingSaveData, setPendingSaveData] = useState(null);
+    const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+    const [navConfirmOpen, setNavConfirmOpen] = useState(false);
+    const [pendingNavigation, setPendingNavigation] = useState(null); // { type: 'push'|'back', href?: string }
 
     useEffect(() => {
         const fetchAllSpots = async () => {
@@ -52,6 +55,59 @@ export default function Page() {
             router.replace("/login");
         }
     }, [loading, user, router]);
+
+    // ブラウザの閉じる/リロード時の確認
+    useEffect(() => {
+        if (!hasUnsavedChanges) return;
+        const handler = (e) => {
+            e.preventDefault();
+            e.returnValue = "未保存の変更があります。本当に移動しますか？";
+            return e.returnValue;
+        };
+        window.addEventListener("beforeunload", handler);
+        return () => window.removeEventListener("beforeunload", handler);
+    }, [hasUnsavedChanges]);
+
+    // 内部リンククリックの抑止と確認
+    useEffect(() => {
+        if (!hasUnsavedChanges) return;
+        const onClick = (e) => {
+            if (e.defaultPrevented) return;
+            if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+            const anchor = e.target.closest?.("a");
+            if (!anchor) return;
+            if (anchor.target === "_blank" || anchor.hasAttribute("download") || anchor.getAttribute("rel") === "external") return;
+            const href = anchor.getAttribute("href");
+            if (!href) return;
+            const url = new URL(href, window.location.href);
+            if (url.origin !== window.location.origin) return;
+            e.preventDefault();
+            setPendingNavigation({ type: "push", href: url.pathname + url.search + url.hash });
+            setNavConfirmOpen(true);
+        };
+        document.addEventListener("click", onClick, true);
+        return () => document.removeEventListener("click", onClick, true);
+    }, [hasUnsavedChanges]);
+
+    // 戻る/進むの抑止
+    useEffect(() => {
+        if (!hasUnsavedChanges) return;
+        const state = { __unsaved_guard__: true, t: Date.now() };
+        try {
+            history.pushState(state, "");
+        } catch {}
+        const onPopState = () => {
+            try {
+                history.pushState(state, "");
+            } catch {}
+            if (!navConfirmOpen) {
+                setPendingNavigation({ type: "back" });
+                setNavConfirmOpen(true);
+            }
+        };
+        window.addEventListener("popstate", onPopState);
+        return () => window.removeEventListener("popstate", onPopState);
+    }, [hasUnsavedChanges, navConfirmOpen]);
 
     const handleSave = useCallback((data) => {
         setPendingSaveData(data);
@@ -89,7 +145,7 @@ export default function Page() {
         <>
             <ResizablePanelGroup direction="horizontal" className={style.container}>
                 <ResizablePanel defaultSize={30} className="flex-1 h-full ">
-                    <EditTouristSpots onSave={handleSave} onPreview={handlePreview} />
+                    <EditTouristSpots onSave={handleSave} onPreview={handlePreview} onDirtyChange={setHasUnsavedChanges} />
                 </ResizablePanel>
                 <ResizableHandle withHandle />
                 <ResizablePanel defaultSize={70}>
@@ -118,6 +174,33 @@ export default function Page() {
                     <AlertDialogFooter>
                         <AlertDialogCancel>キャンセル</AlertDialogCancel>
                         <AlertDialogAction onClick={performSave}>新規作成</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+            {/* 離脱確認ダイアログ */}
+            <AlertDialog open={navConfirmOpen} onOpenChange={setNavConfirmOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>保存していない変更があります</AlertDialogTitle>
+                        <AlertDialogDescription>このページから離れると変更は失われます。移動してもよろしいですか？</AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel onClick={() => setPendingNavigation(null)}>キャンセル</AlertDialogCancel>
+                        <AlertDialogAction
+                            onClick={() => {
+                                const nav = pendingNavigation;
+                                setNavConfirmOpen(false);
+                                setPendingNavigation(null);
+                                setHasUnsavedChanges(false);
+                                if (nav?.type === "push" && nav.href) {
+                                    router.push(nav.href);
+                                } else if (nav?.type === "back") {
+                                    setTimeout(() => router.back(), 0);
+                                }
+                            }}
+                        >
+                            移動する
+                        </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>

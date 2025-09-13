@@ -41,6 +41,23 @@ const TouristSpotsPage = () => {
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [pendingSaveData, setPendingSaveData] = useState(null);
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+    const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+    const [navConfirmOpen, setNavConfirmOpen] = useState(false);
+    const [pendingNavigation, setPendingNavigation] = useState(null); // { type: 'push'|'back', href?: string }
+
+    // ブラウザの閉じる/リロード時の確認
+    useEffect(() => {
+        if (!hasUnsavedChanges) return;
+
+        const handler = (e) => {
+            e.preventDefault();
+            // Chrome では returnValue の設定が必要
+            e.returnValue = "未保存の変更があります。本当に移動しますか？";
+            return e.returnValue;
+        };
+        window.addEventListener("beforeunload", handler);
+        return () => window.removeEventListener("beforeunload", handler);
+    }, [hasUnsavedChanges]);
 
     useEffect(() => {
         const fetchAllSpots = async () => {
@@ -62,6 +79,50 @@ const TouristSpotsPage = () => {
             router.replace("/login");
         }
     }, [loading, user, router]);
+
+    // 内部リンククリックの抑止と確認ダイアログ
+    useEffect(() => {
+        if (!hasUnsavedChanges) return;
+        const onClick = (e) => {
+            if (e.defaultPrevented) return;
+            // 左クリックのみ、修飾キーでの新規タブ等は除外
+            if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+            const anchor = e.target.closest?.("a");
+            if (!anchor) return;
+            if (anchor.target === "_blank" || anchor.hasAttribute("download") || anchor.getAttribute("rel") === "external") return;
+            const href = anchor.getAttribute("href");
+            if (!href) return;
+            const url = new URL(href, window.location.href);
+            if (url.origin !== window.location.origin) return; // 外部リンクは対象外
+            // 同一ページ内の hash 移動もガード対象に含める
+            e.preventDefault();
+            setPendingNavigation({ type: "push", href: url.pathname + url.search + url.hash });
+            setNavConfirmOpen(true);
+        };
+        document.addEventListener("click", onClick, true);
+        return () => document.removeEventListener("click", onClick, true);
+    }, [hasUnsavedChanges]);
+
+    // 戻る/進む（popstate）の抑止: 追加の履歴を積んで疑似ブロック
+    useEffect(() => {
+        if (!hasUnsavedChanges) return;
+        const state = { __unsaved_guard__: true, t: Date.now() };
+        try {
+            history.pushState(state, "");
+        } catch {}
+        const onPopState = () => {
+            // すぐに戻さないと連続バックで抜けられるため、先に戻す
+            try {
+                history.pushState(state, "");
+            } catch {}
+            if (!navConfirmOpen) {
+                setPendingNavigation({ type: "back" });
+                setNavConfirmOpen(true);
+            }
+        };
+        window.addEventListener("popstate", onPopState);
+        return () => window.removeEventListener("popstate", onPopState);
+    }, [hasUnsavedChanges, navConfirmOpen]);
 
     useEffect(() => {
         if (!supabase || !id) return;
@@ -101,8 +162,17 @@ const TouristSpotsPage = () => {
             displayError("保存に失敗しました");
         } else {
             toast.success("保存しました");
+            // 保存成功で未保存フラグをクリアし、最新データを再取得
+            setHasUnsavedChanges(false);
+            try {
+                const { data: refreshed, error: refErr } = await supabase.rpc("get_spot_detail_all_langs", { p_spot_id: id });
+                if (!refErr && refreshed) {
+                    setTouristSpot(refreshed);
+                    setPreviewData(refreshed);
+                }
+            } catch {}
         }
-    }, [pendingSaveData, supabase]);
+    }, [pendingSaveData, supabase, id]);
 
     const handleDelete = useCallback(() => {
         setDeleteConfirmOpen(true);
@@ -117,6 +187,7 @@ const TouristSpotsPage = () => {
             displayError("削除に失敗しました");
         } else {
             toast.success("削除しました");
+            setHasUnsavedChanges(false);
             router.push("/");
         }
     }, [id, supabase, router]);
@@ -147,7 +218,7 @@ const TouristSpotsPage = () => {
         <>
             <ResizablePanelGroup direction="horizontal" className={style.container}>
                 <ResizablePanel defaultSize={30} className="flex-1 h-full ">
-                    <EditTouristSpots touristSpot={touristSpot} onSave={handleSave} onPreview={handlePreview} onDelete={handleDelete} isEdit />
+                    <EditTouristSpots touristSpot={touristSpot} onSave={handleSave} onPreview={handlePreview} onDelete={handleDelete} isEdit onDirtyChange={setHasUnsavedChanges} />
                 </ResizablePanel>
                 <ResizableHandle withHandle />
                 <ResizablePanel defaultSize={70}>
@@ -190,6 +261,35 @@ const TouristSpotsPage = () => {
                         <Button variant="destructive" onClick={performDelete}>
                             削除
                         </Button>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+            {/* 離脱確認ダイアログ */}
+            <AlertDialog open={navConfirmOpen} onOpenChange={setNavConfirmOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>保存していない変更があります</AlertDialogTitle>
+                        <AlertDialogDescription>このページから離れると変更は失われます。移動してもよろしいですか？</AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel onClick={() => setPendingNavigation(null)}>キャンセル</AlertDialogCancel>
+                        <AlertDialogAction
+                            onClick={() => {
+                                const nav = pendingNavigation;
+                                setNavConfirmOpen(false);
+                                setPendingNavigation(null);
+                                // 離脱を許可
+                                setHasUnsavedChanges(false);
+                                if (nav?.type === "push" && nav.href) {
+                                    router.push(nav.href);
+                                } else if (nav?.type === "back") {
+                                    // 少し遅延して back 実行（クリーンアップ後）
+                                    setTimeout(() => router.back(), 0);
+                                }
+                            }}
+                        >
+                            移動する
+                        </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>

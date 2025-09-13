@@ -18,7 +18,7 @@ import TagSelector from "./tagSelector";
 
 import { placeSchema } from "@/lib/placeSchema";
 
-export default function EditTouristSpots({ touristSpot, onSave, onPreview, onDelete, isEdit }) {
+export default function EditTouristSpots({ touristSpot, onSave, onPreview, onDelete, isEdit, onDirtyChange }) {
     const {
         register,
         control,
@@ -26,7 +26,7 @@ export default function EditTouristSpots({ touristSpot, onSave, onPreview, onDel
         watch,
         reset,
         setValue,
-        formState: { errors },
+        formState: { errors, isDirty },
     } = useForm({
         resolver: zodResolver(placeSchema),
         mode: "onChange",
@@ -56,6 +56,13 @@ export default function EditTouristSpots({ touristSpot, onSave, onPreview, onDel
             skipNextAutoPreviewRef.current = true;
         }
     }, [touristSpot, reset]);
+
+    // フォームの未保存状態の変化を親へ通知
+    useEffect(() => {
+        if (typeof onDirtyChange === "function") {
+            onDirtyChange(!!isDirty);
+        }
+    }, [isDirty, onDirtyChange]);
 
     const saveHandler = handleSubmit((data) => {
         if (onSave) onSave(data);
