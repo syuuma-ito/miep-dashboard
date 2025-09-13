@@ -6,7 +6,7 @@
     padding: 12px 16px;
     scale: var(--actual-marker-scale);
     transform: translate(0, -50%);
-    font-family: var(--font-zen-maru-gothic);
+    font-family: var(--font-family);
 }
 .speech_bubble2::before {
     content: "";
@@ -51,8 +51,4 @@
 }
 .container {
     transform-origin: center;
-}
-
-.preview {
-    border: 2px dashed red;
 }

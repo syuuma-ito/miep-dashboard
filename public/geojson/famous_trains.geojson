@@ -1,0 +1,602 @@
+{
+    "type": "FeatureCollection",
+    "generator": "overpass-turbo",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
+    "timestamp": "2025-09-11T18:21:53Z",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "node/5214047208",
+                "KSJ2:LIN": "名古屋線",
+                "KSJ2:STN": "津",
+                "name": "津",
+                "name:en": "Tsu",
+                "name:ja": "津",
+                "name:ja_kana": "つ",
+                "name:ja_rm": "Tsu",
+                "name:ko": "쓰",
+                "note": "National-Land Numerical Information (Railway) 2007, MLIT Japan",
+                "note:ja": "国土数値情報（鉄道データ）平成19年　国土交通省",
+                "operator": "Kintetsu Corporation",
+                "public_transport": "station",
+                "railway": "station",
+                "ref": "E39",
+                "source": "KSJ2",
+                "source_ref": "http://nlftp.mlit.go.jp/ksj/jpgis/datalist/KsjTmplt-N02-v1_1.html",
+                "wikidata": "Q869763",
+                "wikipedia": "ja:津駅"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [136.5102642, 34.733994]
+            },
+            "id": "node/5214047208"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "node/4357199290",
+                "KSJ2:LIN": "紀勢線",
+                "KSJ2:STN": "松阪",
+                "name": "松阪",
+                "name:en": "Matsusaka",
+                "name:ja": "松阪",
+                "name:ja_kana": "まつさか",
+                "name:ja_rm": "Matsusaka",
+                "name:ko": "마쓰사카",
+                "note": "National-Land Numerical Information (Railway) 2007, MLIT Japan",
+                "note:ja": "国土数値情報（鉄道データ）平成19年　国土交通省",
+                "operator": "東海旅客鉄道",
+                "railway": "station",
+                "source": "KSJ2",
+                "source_ref": "http://nlftp.mlit.go.jp/ksj/jpgis/datalist/KsjTmplt-N02-v1_1.html",
+                "wikidata": "Q5357756",
+                "wikipedia": "ja:松阪駅"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [136.5358573, 34.5769258]
+            },
+            "id": "node/4357199290"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "node/332395019",
+                "KSJ2:LIN": "山田線",
+                "KSJ2:STN": "松阪",
+                "name": "松阪",
+                "name:en": "Matsusaka",
+                "name:ja": "松阪",
+                "name:ja_kana": "まつさか",
+                "name:ko": "마쓰사카",
+                "note": "National-Land Numerical Information (Railway) 2007, MLIT Japan",
+                "note:ja": "国土数値情報鉄道データ平成19年　国土交通省",
+                "operator": "近畿日本鉄道",
+                "public_transport": "station",
+                "railway": "station",
+                "source": "KSJ2",
+                "source_ref": "http://nlftp.mlit.go.jp/ksj/jpgis/datalist/KsjTmplt-N02-v1_1.html",
+                "wikidata": "Q5357756",
+                "wikipedia": "ja:松阪駅"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [136.5364468, 34.5770222]
+            },
+            "id": "node/332395019"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "node/2155508875",
+                "KSJ2:LIN": "志摩線",
+                "KSJ2:STN": "賢島",
+                "name": "賢島",
+                "name:en": "Kashikojima",
+                "name:ja": "賢島",
+                "name:ja_kana": "かしこじま",
+                "name:ko": "가시코지마",
+                "note": "National-Land Numerical Information (Railway) 2007, MLIT Japan",
+                "note:ja": "国土数値情報鉄道データ平成19年　国土交通省",
+                "operator": "近畿日本鉄道",
+                "platforms": "2",
+                "public_transport": "station",
+                "railway": "station",
+                "source": "KSJ2",
+                "source_ref": "http://nlftp.mlit.go.jp/ksj/jpgis/datalist/KsjTmplt-N02-v1_1.html",
+                "wikidata": "Q6374294",
+                "wikipedia": "ja:賢島駅"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [136.8191726, 34.3085811]
+            },
+            "id": "node/2155508875"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "node/265822795",
+                "name": "鳥羽",
+                "name:en": "Toba",
+                "name:ja": "鳥羽",
+                "name:ja_kana": "とば",
+                "name:ko": "도바",
+                "operator": "JR東海",
+                "public_transport": "station",
+                "railway": "station",
+                "source": "KSJ2",
+                "source_ref": "http://nlftp.mlit.go.jp/ksj/jpgis/datalist/KsjTmplt-N02-v1_1.html",
+                "wikidata": "Q7811445",
+                "wikipedia": "ja:鳥羽駅"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [136.8427403, 34.4864552]
+            },
+            "id": "node/265822795"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "node/332578744",
+                "name": "鳥羽",
+                "name:en": "Toba",
+                "name:ja": "鳥羽",
+                "name:ja_kana": "とば",
+                "name:ko": "도바",
+                "operator": "近畿日本鉄道",
+                "public_transport": "station",
+                "railway": "station",
+                "ref": "M78",
+                "source": "KSJ2",
+                "source_ref": "http://nlftp.mlit.go.jp/ksj/jpgis/datalist/KsjTmplt-N02-v1_1.html",
+                "wheelchair": "yes",
+                "wikidata": "Q7811445",
+                "wikipedia": "ja:鳥羽駅"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [136.8430635, 34.4867812]
+            },
+            "id": "node/332578744"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "node/265822735",
+                "name": "伊勢市",
+                "name:en": "Iseshi",
+                "name:ja": "伊勢市",
+                "name:ko": "이세시",
+                "railway": "station",
+                "source": "KSJ2",
+                "source_ref": "http://nlftp.mlit.go.jp/ksj/jpgis/datalist/KsjTmplt-N02-v1_1.html",
+                "wikidata": "Q6079748",
+                "wikipedia": "ja:伊勢市駅"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [136.7098291, 34.4911349]
+            },
+            "id": "node/265822735"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "node/332395801",
+                "KSJ2:LIN": "山田線",
+                "KSJ2:STN": "伊勢市",
+                "name": "伊勢市",
+                "name:en": "Iseshi",
+                "name:ja": "伊勢市",
+                "name:ko": "이세시",
+                "note": "National-Land Numerical Information (Railway) 2007, MLIT Japan",
+                "note:ja": "国土数値情報鉄道データ平成19年　国土交通省",
+                "platforms": "2",
+                "public_transport": "station",
+                "railway": "station",
+                "ref": "M73",
+                "source": "KSJ2",
+                "source_ref": "http://nlftp.mlit.go.jp/ksj/jpgis/datalist/KsjTmplt-N02-v1_1.html",
+                "wikidata": "Q6079748",
+                "wikipedia": "ja:伊勢市駅"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [136.7103558, 34.4919919]
+            },
+            "id": "node/332395801"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "node/2324990638",
+                "layer": "1",
+                "name": "近鉄四日市",
+                "name:en": "Kintetsu-Yokkaichi",
+                "name:ja": "近鉄四日市",
+                "name:ja-Hira": "きんてつよっかいち",
+                "network": "名古屋線;湯の山線",
+                "operator": "近畿日本鉄道",
+                "public_transport": "station",
+                "railway": "station",
+                "ref": "E21;K21",
+                "toilets:wheelchair": "yes",
+                "wheelchair": "yes",
+                "wikidata": "Q6414379",
+                "wikipedia": "ja:近鉄四日市駅"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [136.6186048, 34.9670382]
+            },
+            "id": "node/2324990638"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "node/4129213672",
+                "name": "あすなろう四日市",
+                "name:en": "Asunarou Yokkaichi",
+                "name:ja": "あすなろう四日市",
+                "network": "内部線;八王子線",
+                "operator": "四日市あすなろう鉄道",
+                "public_transport": "station",
+                "railway": "station",
+                "wikidata": "Q6414379",
+                "wikipedia": "ja:近鉄四日市駅"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [136.618275, 34.9657512]
+            },
+            "id": "node/4129213672"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "node/265836235",
+                "KSJ2:LIN": "関西線",
+                "KSJ2:STN": "四日市",
+                "name": "四日市",
+                "name:en": "Yokkaichi",
+                "name:ja": "四日市",
+                "name:ja_kana": "よっかいち",
+                "name:ja_rm": "Yokkaichi",
+                "name:ko": "욧카이치",
+                "note": "National-Land Numerical Information (Railway) 2007, MLIT Japan",
+                "note:ja": "国土数値情報（鉄道データ）平成19年　国土交通省",
+                "public_transport": "station",
+                "railway": "station",
+                "source": "KSJ2",
+                "source_ref": "http://nlftp.mlit.go.jp/ksj/jpgis/datalist/KsjTmplt-N02-v1_1.html",
+                "wikidata": "Q5358995",
+                "wikipedia": "ja:四日市駅"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [136.6302658, 34.9630151]
+            },
+            "id": "node/265836235"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "node/5214065550",
+                "KSJ2:RAS": "eb03_1346",
+                "KSJ2:STN": "桑名",
+                "KSJ2:segment": "eb02_2576",
+                "name": "桑名",
+                "name:en": "Kuwana",
+                "name:ja": "桑名",
+                "name:ja_kana": "くわな",
+                "name:ko": "구와나",
+                "note": "National-Land Numerical Information (Railway) 2007, MLIT Japan",
+                "note:ja": "国土数値情報（鉄道データ）平成19年　国土交通省",
+                "public_transport": "station",
+                "railway": "station",
+                "source": "KSJ2",
+                "source_ref": "http://nlftp.mlit.go.jp/ksj/jpgis/datalist/KsjTmplt-N02-v1_1.html",
+                "wikidata": "Q5359101",
+                "wikipedia": "ja:桑名駅"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [136.6837701, 35.0671696]
+            },
+            "id": "node/5214065550"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "node/6634224210",
+                "KSJ2:LIN": "名古屋線",
+                "KSJ2:STN": "桑名",
+                "name": "桑名",
+                "name:en": "Kuwana",
+                "name:ja": "桑名",
+                "name:ja_kana": "くわな",
+                "name:ko": "구와나",
+                "note": "National-Land Numerical Information (Railway) 2007, MLIT Japan",
+                "note:ja": "国土数値情報（鉄道データ）平成19年　国土交通省",
+                "public_transport": "station",
+                "railway": "station",
+                "ref": "E13",
+                "source": "KSJ2",
+                "source_ref": "http://nlftp.mlit.go.jp/ksj/jpgis/datalist/KsjTmplt-N02-v1_1.html",
+                "wikidata": "Q5359101",
+                "wikipedia": "ja:桑名駅"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [136.6833263, 35.0671546]
+            },
+            "id": "node/6634224210"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "node/8172711109",
+                "KSJ2:LIN": "湯の山線",
+                "KSJ2:RAS": "eb03_1205",
+                "KSJ2:STN": "湯の山温泉",
+                "KSJ2:segment": "eb02_2344",
+                "alt_name:ko": "유노야마온센",
+                "name": "湯の山温泉",
+                "name:en": "Yunoyama-Onsen",
+                "name:ja": "湯の山温泉",
+                "name:ko": "유노야마온천",
+                "note": "National-Land Numerical Information (Railway) 2007, MLIT Japan",
+                "note:ja": "国土数値情報（鉄道データ）平成19年　国土交通省",
+                "public_transport": "station",
+                "railway": "station",
+                "source": "KSJ2",
+                "source_ref": "http://nlftp.mlit.go.jp/ksj/jpgis/datalist/KsjTmplt-N02-v1_1.html",
+                "wikidata": "Q8061376",
+                "wikipedia": "ja:湯の山温泉駅"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [136.4740053, 35.0118439]
+            },
+            "id": "node/8172711109"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "node/9851877838",
+                "KSJ2:LIN": "伊勢線",
+                "KSJ2:STN": "鈴鹿",
+                "name": "鈴鹿",
+                "name:en": "Suzuka",
+                "name:ja": "鈴鹿",
+                "name:ko": "스즈카",
+                "public_transport": "station",
+                "railway": "station",
+                "train": "yes",
+                "wikidata": "Q7651178",
+                "wikipedia": "ja:鈴鹿駅"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [136.5888447, 34.8784912]
+            },
+            "id": "node/9851877838"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "node/267445370",
+                "name": "伊賀上野",
+                "name:en": "Iga-Ueno",
+                "name:ja": "伊賀上野",
+                "name:ja-Hira": "いがうえの",
+                "name:ja-Latn": "Iga Ueno",
+                "name:ko": "이가우에노",
+                "network": "JR関西本線;伊賀鉄道伊賀線",
+                "note": "National-Land Numerical Information (Railway) 2007, MLIT Japan",
+                "note:ja": "国土数値情報（鉄道データ）平成19年　国土交通省",
+                "operator": "西日本旅客鉄道",
+                "public_transport": "station",
+                "railway": "station",
+                "source": "KSJ2",
+                "source_ref": "http://nlftp.mlit.go.jp/ksj/jpgis/datalist/KsjTmplt-N02-v1_1.html",
+                "train": "yes",
+                "wikidata": "Q3701508",
+                "wikipedia": "ja:伊賀上野駅"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [136.1235104, 34.7889966]
+            },
+            "id": "node/267445370"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "node/265045164",
+                "KSJ2:LIN": "名松線",
+                "KSJ2:STN": "伊勢奥津",
+                "name": "伊勢奥津",
+                "name:en": "Ise-Okitsu",
+                "name:ja": "伊勢奥津",
+                "name:ko": "이세오키쓰",
+                "note": "National-Land Numerical Information (Railway) 2007, MLIT Japan",
+                "note:ja": "国土数値情報（鉄道データ）平成19年　国土交通省",
+                "railway": "station",
+                "source": "KSJ2",
+                "source_ref": "http://nlftp.mlit.go.jp/ksj/jpgis/datalist/KsjTmplt-N02-v1_1.html",
+                "wikidata": "Q4355606",
+                "wikipedia": "ja:伊勢奥津駅"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [136.2595867, 34.5120306]
+            },
+            "id": "node/265045164"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "node/265823994",
+                "KSJ2:LIN": "紀勢線",
+                "KSJ2:STN": "紀伊長島",
+                "name": "紀伊長島",
+                "name:en": "Kii-Nagashima",
+                "name:ja": "紀伊長島",
+                "name:ko": "기이나가시마",
+                "note": "National-Land Numerical Information (Railway) 2007, MLIT Japan",
+                "note:ja": "国土数値情報（鉄道データ）平成19年　国土交通省",
+                "public_transport": "station",
+                "railway": "station",
+                "source": "KSJ2",
+                "source_ref": "http://nlftp.mlit.go.jp/ksj/jpgis/datalist/KsjTmplt-N02-v1_1.html",
+                "wikidata": "Q5357703",
+                "wikipedia": "ja:紀伊長島駅"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [136.3398073, 34.2092584]
+            },
+            "id": "node/265823994"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "node/265824187",
+                "KSJ2:LIN": "紀勢線",
+                "KSJ2:STN": "尾鷲",
+                "name": "尾鷲",
+                "name:en": "Owase",
+                "name:ja": "尾鷲",
+                "name:ja_kana": "おわせ",
+                "name:ja_rm": "Owase",
+                "name:ko": "오와세",
+                "note": "National-Land Numerical Information (Railway) 2007, MLIT Japan",
+                "note:ja": "国土数値情報（鉄道データ）平成19年　国土交通省",
+                "public_transport": "station",
+                "railway": "station",
+                "source": "KSJ2",
+                "source_ref": "http://nlftp.mlit.go.jp/ksj/jpgis/datalist/KsjTmplt-N02-v1_1.html",
+                "wikidata": "Q5357761",
+                "wikipedia": "ja:尾鷲駅"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [136.1901497, 34.0747359]
+            },
+            "id": "node/265824187"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "node/265825968",
+                "KSJ2:LIN": "紀勢線",
+                "KSJ2:STN": "熊野市",
+                "name": "熊野市",
+                "name:en": "Kumanoshi",
+                "name:ja": "熊野市",
+                "name:ja_kana": "くまのし",
+                "name:ja_rm": "Kumanoshi",
+                "name:ko": "구마노시",
+                "note": "National-Land Numerical Information (Railway) 2007, MLIT Japan",
+                "note:ja": "国土数値情報（鉄道データ）平成19年　国土交通省",
+                "public_transport": "station",
+                "railway": "station",
+                "source": "KSJ2",
+                "source_ref": "http://nlftp.mlit.go.jp/ksj/jpgis/datalist/KsjTmplt-N02-v1_1.html",
+                "wikidata": "Q5357377",
+                "wikipedia": "ja:熊野市駅"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [136.098724, 33.8896761]
+            },
+            "id": "node/265825968"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "node/265824173",
+                "KSJ2:LIN": "紀勢線",
+                "KSJ2:STN": "亀山",
+                "name": "亀山",
+                "name:en": "Kameyama",
+                "name:ja": "亀山",
+                "name:ko": "가메야마",
+                "network": "JR関西本線;JR紀勢本線",
+                "note": "National-Land Numerical Information (Railway) 2007, MLIT Japan",
+                "note:ja": "国土数値情報（鉄道データ）平成19年　国土交通省",
+                "operator": "東海旅客鉄道",
+                "public_transport": "station",
+                "railway": "station",
+                "source": "KSJ2",
+                "source_ref": "http://nlftp.mlit.go.jp/ksj/jpgis/datalist/KsjTmplt-N02-v1_1.html",
+                "train": "yes",
+                "wikidata": "Q5358681",
+                "wikipedia": "ja:亀山駅 (三重県)"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [136.4503325, 34.8502999]
+            },
+            "id": "node/265824173"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "node/5297857230",
+                "KSJ2:LIN": "関西線",
+                "KSJ2:STN": "富田",
+                "name": "富田",
+                "name:en": "Tomida",
+                "name:ja": "富田",
+                "name:ko": "도미다",
+                "note": "National-Land Numerical Information (Railway) 2007, MLIT Japan",
+                "note:ja": "国土数値情報（鉄道データ）平成19年　国土交通省",
+                "public_transport": "station",
+                "railway": "station",
+                "source": "KSJ2",
+                "source_ref": "http://nlftp.mlit.go.jp/ksj/jpgis/datalist/KsjTmplt-N02-v1_1.html",
+                "wikidata": "Q5358756",
+                "wikipedia": "ja:富田駅 (三重県)"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [136.6532437, 35.007986]
+            },
+            "id": "node/5297857230"
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "@id": "node/6634220245",
+                "KSJ2:LIN": "名古屋線",
+                "KSJ2:STN": "近鉄富田",
+                "name": "近鉄富田",
+                "name:en": "Kintetsu Tomida",
+                "name:ja": "近鉄富田",
+                "name:ja_kana": "きんてつ とみだ",
+                "name:ko": "긴테쓰토미다",
+                "note": "National-Land Numerical Information (Railway) 2007, MLIT Japan",
+                "note:ja": "国土数値情報（鉄道データ）平成19年　国土交通省",
+                "public_transport": "station",
+                "railway": "station",
+                "ref": "E17",
+                "source": "KSJ2",
+                "source_ref": "http://nlftp.mlit.go.jp/ksj/jpgis/datalist/KsjTmplt-N02-v1_1.html",
+                "wheelchair": "yes",
+                "wikidata": "Q2913531",
+                "wikipedia": "ja:近鉄富田駅"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [136.6492749, 35.0063972]
+            },
+            "id": "node/6634220245"
+        }
+    ]
+}

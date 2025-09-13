@@ -7,7 +7,7 @@
     position: relative;
     display: flex;
     height: var(--marker-height);
-    font-family: var(--font-zen-maru-gothic);
+    font-family: var(--font-family);
     transform: scale(var(--global-marker-scale, 1));
 }
 .container {

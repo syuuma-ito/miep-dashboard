@@ -14,6 +14,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 
 import styles from "./map.module.css";
 
+import mapStyle from "@/styles/map";
 import { memo } from "react";
 
 function getScale(zoom, baseZoom = 10) {
@@ -35,7 +36,7 @@ const Map = ({ touristSpot = null, mapDecorations = [], onLoad, onMapInfoChange,
 
         map.current = new maplibregl.Map({
             container: mapContainer.current,
-            style: "/style/map-style.json",
+            style: mapStyle(lang),
             center: [136.508588, 34.730283],
             zoom: 9,
             localIdeographFontFamily: false,

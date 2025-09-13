@@ -1,9 +1,9 @@
 import style from "./image.module.css";
 
-export default function ImagePin({ src, alt, onClick, preview }) {
+export default function ImagePin({ src, onClick, preview }) {
     return (
         <div className={`${style.container} ${preview ? style.preview : ""}`} onClick={onClick}>
-            <img src={src} alt={alt} className={style.image} />
+            <img src={src} alt="map pin" className={style.image} />
         </div>
     );
 }

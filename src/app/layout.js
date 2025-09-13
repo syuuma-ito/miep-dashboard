@@ -1,14 +1,22 @@
 import { Header } from "@/components/Header";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/contexts/AuthContext";
-import { Zen_Kaku_Gothic_New } from "next/font/google";
+import { Gaegu, Zen_Maru_Gothic } from "next/font/google";
 import "./globals.css";
 import style from "./layout.module.css";
 
-const zenKakuGothic = Zen_Kaku_Gothic_New({
-    variable: "--font-zen-kaku-gothic",
+const zenMaruGothic = Zen_Maru_Gothic({
+    variable: "--font-zen-maru-gothic",
     subsets: ["latin"],
     weight: ["400"],
+    display: "swap",
+});
+
+const gaegu = Gaegu({
+    variable: "--font-gaegu",
+    subsets: ["latin"],
+    weight: ["400"],
+    display: "swap",
 });
 
 export const metadata = {
@@ -39,7 +47,7 @@ export default function RootLayout({ children }) {
                 <link rel="shortcut icon" href="/favicon.ico" />
                 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
             </head>
-            <body className={`${zenKakuGothic.variable} antialiased ${style.body}`}>
+            <body className={`${zenMaruGothic.variable} ${gaegu.variable} antialiased ${style.body}`}>
                 <AuthProvider>
                     <Header className={style.header} />
                     <main className={style.main}>{children}</main>
