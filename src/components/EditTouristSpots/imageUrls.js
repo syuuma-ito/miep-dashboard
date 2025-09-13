@@ -33,8 +33,8 @@ const ImageUrls = ({ control, register, errors, setValue }) => {
                 <div className={style.inputContainer} key={field.id}>
                     <div className={style.inputWithLabel}>
                         <label>URL {index + 1}</label>
-                        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-                            <Input placeholder="画像のURLを入力" {...register(`images.${index}`)} />
+                        <div style={{ display: "flex", gap: "8px", alignItems: "center", width: "100%" }}>
+                            <Input placeholder="画像のURLを入力" {...register(`images.${index}`)} className="flex-1" />
                             <Button type="button" variant="outline" size="sm" onClick={() => openFilePicker(index)}>
                                 画像を選択
                             </Button>

@@ -11,12 +11,16 @@ import React, { useEffect, useState } from "react";
 import styles from "./FileGridView.module.css";
 
 const FileGridView = ({ onFileSelect, isOpen, setOpen }) => {
+    // 表示上のルートパスを /contents に固定
+    const BASE_PATH = "/contents";
     const [contents, setContents] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [currentPath, setCurrentPath] = useState("/");
-    const [navigationHistory, setNavigationHistory] = useState(["/"]);
+    const [currentPath, setCurrentPath] = useState(BASE_PATH);
+    const [navigationHistory, setNavigationHistory] = useState([BASE_PATH]);
     const [selectedFileState, setSelectedFileState] = useState(null);
+
+    const [previewUrl, setPreviewUrl] = useState(null);
 
     useEffect(() => {
         const fetchContents = async () => {
@@ -42,9 +46,9 @@ const FileGridView = ({ onFileSelect, isOpen, setOpen }) => {
     }, []);
 
     useEffect(() => {
-        setCurrentPath("/");
+        setCurrentPath(BASE_PATH);
         setSelectedFileState(null);
-        setNavigationHistory(["/"]);
+        setNavigationHistory([BASE_PATH]);
     }, [isOpen]);
 
     // 画像かどうかを判定する関数
@@ -164,18 +168,22 @@ const FileGridView = ({ onFileSelect, isOpen, setOpen }) => {
 
     // パンくずリストの生成
     const getBreadcrumbs = (path) => {
-        if (path === "/") return [{ name: "ホーム", path: "/" }];
+        // 表示上のホームを /contents に固定し、/contents より上は表示させない
+        const trimTrailingSlash = (p) => (p.length > 1 && p.endsWith("/") ? p.slice(0, -1) : p);
+        const base = trimTrailingSlash(BASE_PATH);
+        const current = trimTrailingSlash(path);
 
-        const parts = path.split("/").filter((part) => part !== "");
-        const breadcrumbs = [{ name: "ホーム", path: "/" }];
+        const breadcrumbs = [{ name: "ホーム", path: base }];
+        if (current === base) return breadcrumbs;
 
-        let currentPath = "";
+        // /contents より下位のパスのみをパンくずに含める
+        const rest = current.startsWith(base) ? current.slice(base.length) : "";
+        const parts = rest.split("/").filter(Boolean);
+
+        let acc = base;
         parts.forEach((part) => {
-            currentPath += "/" + part;
-            breadcrumbs.push({
-                name: part,
-                path: currentPath,
-            });
+            acc += "/" + part;
+            breadcrumbs.push({ name: part, path: acc });
         });
 
         return breadcrumbs;
@@ -198,6 +206,8 @@ const FileGridView = ({ onFileSelect, isOpen, setOpen }) => {
 
     // パンくずリストクリック処理
     const handleBreadcrumbClick = (path) => {
+        // /contents より上へは移動させない
+        if (!path.startsWith(BASE_PATH)) return;
         setCurrentPath(path);
         setNavigationHistory((prev) => [...prev, path]);
     };
@@ -207,9 +217,11 @@ const FileGridView = ({ onFileSelect, isOpen, setOpen }) => {
         if (navigationHistory.length > 1) {
             const newHistory = [...navigationHistory];
             newHistory.pop();
-            const previousPath = newHistory[newHistory.length - 1];
-            setCurrentPath(previousPath);
-            setNavigationHistory(newHistory);
+            const previousPath = newHistory[newHistory.length - 1] || BASE_PATH;
+            // /contents より上へ戻らないよう安全策
+            const safePrev = previousPath.startsWith(BASE_PATH) ? previousPath : BASE_PATH;
+            setCurrentPath(safePrev);
+            setNavigationHistory(newHistory.length ? newHistory : [BASE_PATH]);
         }
     };
 
@@ -327,15 +339,15 @@ const FileGridView = ({ onFileSelect, isOpen, setOpen }) => {
                             <div
                                 key={`folder-${index}`}
                                 className={`
-                                    flex flex-col items-center p-3 rounded-lg border-2 cursor-pointer select-none
-                                    transition-all duration-200 hover:bg-accent hover:border-primary/50
+                                    flex flex-col items-center p-2 rounded-lg border-1 cursor-pointer select-none
+                                    transition-all duration-200 hover:border-primary/50 aspect-ratio-1/1
                                     ${selectedFileState?.path === folder.path ? "bg-primary/10 border-primary" : "border-transparent hover:border-border"}
                                 `}
                                 onClick={() => handleItemClick(folder)}
                                 onDoubleClick={() => handleFolderDoubleClick(folder)}
                             >
                                 <Folder size={48} className="mb-2 pointer-events-none" />
-                                <span className="text-xs text-center font-medium truncate w-full pointer-events-none" title={folder.name}>
+                                <span className="text-xs text-center font-medium truncate pointer-events-none" title={folder.name}>
                                     {folder.name}
                                 </span>
                                 <Badge variant="outline" className="text-xs mt-1 pointer-events-none">
@@ -354,6 +366,7 @@ const FileGridView = ({ onFileSelect, isOpen, setOpen }) => {
                                     ${selectedFileState?.path === file.path ? "bg-primary/10 border-primary" : "border-transparent hover:border-border"}
                                 `}
                                 onClick={() => handleItemClick(file)}
+                                onDoubleClick={() => setPreviewUrl(`${process.env.NEXT_PUBLIC_MIEP_URL}${file.path}`)}
                             >
                                 <div className="mb-2 pointer-events-none">
                                     <FileIcon fileName={file.name} filePath={file.path} />
@@ -366,36 +379,54 @@ const FileGridView = ({ onFileSelect, isOpen, setOpen }) => {
                     </div>
                 </div>
 
-                {selectedFileState && (
-                    <div className="border-t flex gap-8 p-4 justify-between">
-                        <div>
-                            <span className="font-semibold text-primary">名前:</span>
-                            <p className="mt-1">{selectedFileState.name}</p>
-                        </div>
-                        <div>
-                            <span className="font-semibold text-primary">パス:</span>
-                            <p className="mt-1 font-mono text-xs break-all">{selectedFileState.path}</p>
-                        </div>
-
-                        <Button
-                            className="mt-4"
-                            onClick={() => {
-                                const miepUrl = process.env.NEXT_PUBLIC_MIEP_URL;
-                                const absoluteUrl = `${miepUrl.replace(/\/$/, "")}${selectedFileState.path.startsWith("/") ? selectedFileState.path : "/" + selectedFileState.path}`;
-                                onFileSelect({
-                                    ...selectedFileState,
-                                    absoluteUrl,
-                                });
-                            }}
-                        >
-                            このファイルを選択
-                        </Button>
-                    </div>
-                )}
-
-                <div className="border-t p-4">
+                <div className="border-t p-4 flex items-center justify-between">
                     <p className="text-sm text-muted-foreground">データ更新: {new Date(contents.generatedAt).toLocaleString("ja-JP")}</p>
+                    {selectedFileState && (
+                        <div className="flex items-center gap-8">
+                            <div>
+                                <p className="">ファイル名 : {selectedFileState.name}</p>
+                            </div>
+                            <div>
+                                <FileIcon fileName={selectedFileState.name} filePath={selectedFileState.path} className="h-8 w-8" />
+                            </div>
+                            <Button
+                                variant="outline"
+                                onClick={() => {
+                                    const miepUrl = process.env.NEXT_PUBLIC_MIEP_URL;
+                                    const absoluteUrl = `${miepUrl.replace(/\/$/, "")}${selectedFileState.path.startsWith("/") ? selectedFileState.path : "/" + selectedFileState.path}`;
+                                    setPreviewUrl(absoluteUrl);
+                                }}
+                                disabled={!isImageFile(selectedFileState.name)}
+                            >
+                                プレビュー
+                            </Button>
+                            <Button
+                                onClick={() => {
+                                    const miepUrl = process.env.NEXT_PUBLIC_MIEP_URL;
+                                    const absoluteUrl = `${miepUrl.replace(/\/$/, "")}${selectedFileState.path.startsWith("/") ? selectedFileState.path : "/" + selectedFileState.path}`;
+                                    onFileSelect({
+                                        ...selectedFileState,
+                                        absoluteUrl,
+                                    });
+                                }}
+                            >
+                                このファイルを選択
+                            </Button>
+                        </div>
+                    )}
                 </div>
+                <Dialog open={!!previewUrl} onOpenChange={() => setPreviewUrl(null)}>
+                    <DialogContent className="w-[60vw] h-[60vh] flex flex-col p-0">
+                        <DialogTitle className="p-4 border-b">ファイルプレビュー</DialogTitle>
+                        <div className="flex-1 flex items-center justify-center">
+                            {selectedFileState && isImageFile(selectedFileState.name) ? (
+                                <img src={previewUrl} alt={selectedFileState.name} className="max-w-full max-h-full object-contain" />
+                            ) : (
+                                <p className="text-white">プレビューは画像ファイルのみ対応しています。</p>
+                            )}
+                        </div>
+                    </DialogContent>
+                </Dialog>
             </DialogContent>
         </Dialog>
     );

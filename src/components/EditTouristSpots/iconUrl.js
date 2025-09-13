@@ -22,8 +22,8 @@ const IconUrl = ({ register, errors, setValue }) => {
             <div className={style.inputContainer}>
                 <div className={style.inputWithLabel}>
                     <label>URL</label>
-                    <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-                        <Input placeholder="アイコンのURLを入力" {...register("icon")} />
+                    <div style={{ display: "flex", gap: "8px", alignItems: "center", width: "100%" }}>
+                        <Input placeholder="アイコンのURLを入力" {...register("icon")} className="flex-1" />
                         <Button type="button" variant="outline" size="sm" onClick={() => setIsFilePickerOpen(true)}>
                             画像を選択
                         </Button>

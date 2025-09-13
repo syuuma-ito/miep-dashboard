@@ -1,5 +1,6 @@
 "use client";
 
+import FileGridView from "@/components/FileGridView";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -161,6 +162,7 @@ export default function EditDecorations({ mapDecoration, onSave, onPreview, onDe
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
     const [validatedData, setValidatedData] = useState(null);
+    const [isFilePickerOpen, setIsFilePickerOpen] = useState(false);
 
     const watchedType = watch("type");
 
@@ -216,6 +218,17 @@ export default function EditDecorations({ mapDecoration, onSave, onPreview, onDe
         }
         setDeleteConfirmOpen(false);
         setValidatedData(null);
+    };
+
+    const handleFileSelect = (file) => {
+        if (file && file.absoluteUrl) {
+            setValue("options.src", file.absoluteUrl, { shouldDirty: true, shouldValidate: true });
+        }
+        setIsFilePickerOpen(false);
+    };
+
+    const openFilePicker = () => {
+        setIsFilePickerOpen(true);
     };
 
     return (
@@ -348,7 +361,12 @@ export default function EditDecorations({ mapDecoration, onSave, onPreview, onDe
                         <div className={style.inputContainer}>
                             <div className={style.inputWithLabel}>
                                 <label>URL</label>
-                                <Input placeholder="" {...register("options.src")} />
+                                <div style={{ display: "flex", gap: "8px", alignItems: "center", width: "100%" }}>
+                                    <Input placeholder="画像のURLを入力" {...register("options.src")} className="flex-1" />
+                                    <Button type="button" variant="outline" size="sm" onClick={openFilePicker}>
+                                        画像を選択
+                                    </Button>
+                                </div>
                             </div>
                             <ErrorMessage message={errors.options?.src?.message} className={style.errorMessage} />
                         </div>
@@ -388,6 +406,8 @@ export default function EditDecorations({ mapDecoration, onSave, onPreview, onDe
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
+
+            <FileGridView onFileSelect={handleFileSelect} isOpen={isFilePickerOpen} setOpen={setIsFilePickerOpen} />
         </div>
     );
 }
