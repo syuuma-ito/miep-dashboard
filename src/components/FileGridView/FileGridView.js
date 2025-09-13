@@ -7,11 +7,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ChevronLeft, File, FileCode, FileImage, FileText, Folder } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./FileGridView.module.css";
 
 const FileGridView = ({ onFileSelect, isOpen, setOpen }) => {
-    // 表示上のルートパスを /contents に固定
     const BASE_PATH = "/contents";
     const [contents, setContents] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -21,6 +20,40 @@ const FileGridView = ({ onFileSelect, isOpen, setOpen }) => {
     const [selectedFileState, setSelectedFileState] = useState(null);
 
     const [previewUrl, setPreviewUrl] = useState(null);
+
+    const historyCountRef = useRef(0);
+    const closingViaBackRef = useRef(false);
+    const closingPreviewManuallyRef = useRef(false);
+    const previewUrlRef = useRef(previewUrl);
+    const navHistoryRef = useRef(navigationHistory);
+    const currentPathRef = useRef(currentPath);
+
+    // 履歴に1つ積む（URLは変更しない）
+    const pushHistory = (state = {}) => {
+        try {
+            const newState = { __fileGridView: true, ...state };
+            window.history.pushState(newState, "", window.location.href);
+            historyCountRef.current += 1;
+        } catch (_) {
+            // history 操作が失敗してもアプリを壊さない
+        }
+    };
+
+    // プレビューを閉じる（手動クローズ時は履歴も1つ戻す）
+    const closePreview = (manual = false) => {
+        if (previewUrl) {
+            if (manual) closingPreviewManuallyRef.current = true;
+            setPreviewUrl(null);
+            if (manual) {
+                // プレビュー用に積んだ履歴を1つ戻す
+                try {
+                    window.history.back();
+                } catch (_) {
+                    /* noop */
+                }
+            }
+        }
+    };
 
     useEffect(() => {
         const fetchContents = async () => {
@@ -46,10 +79,85 @@ const FileGridView = ({ onFileSelect, isOpen, setOpen }) => {
     }, []);
 
     useEffect(() => {
+        // 最新の参照に同期
+        previewUrlRef.current = previewUrl;
+    }, [previewUrl]);
+
+    useEffect(() => {
+        navHistoryRef.current = navigationHistory;
+    }, [navigationHistory]);
+
+    useEffect(() => {
+        currentPathRef.current = currentPath;
+    }, [currentPath]);
+
+    useEffect(() => {
         setCurrentPath(BASE_PATH);
         setSelectedFileState(null);
         setNavigationHistory([BASE_PATH]);
-    }, [isOpen]);
+
+        // ダイアログの開閉に応じて履歴イベントをセット/解除
+        if (isOpen) {
+            // ダイアログ起動時にベースエントリを1つ積む
+            try {
+                const state = { __fileGridView: true, reason: "dialog-open", path: BASE_PATH, preview: false };
+                window.history.pushState(state, "", window.location.href);
+                historyCountRef.current += 1;
+            } catch (_) {
+                /* noop */
+            }
+
+            const onPopState = () => {
+                // 手動でプレビューを閉じるための back() による pop はここで消費
+                if (closingPreviewManuallyRef.current) {
+                    closingPreviewManuallyRef.current = false;
+                    historyCountRef.current = Math.max(0, historyCountRef.current - 1);
+                    return;
+                }
+
+                // まずプレビューが開いていればそれを優先して閉じる
+                if (previewUrlRef.current) {
+                    setPreviewUrl(null);
+                    historyCountRef.current = Math.max(0, historyCountRef.current - 1);
+                    return;
+                }
+
+                // 階層があれば1つ戻す
+                const hist = navHistoryRef.current || [];
+                if (hist.length > 1) {
+                    const newHistory = [...hist];
+                    newHistory.pop();
+                    const previousPath = newHistory[newHistory.length - 1] || BASE_PATH;
+                    const safePrev = previousPath.startsWith(BASE_PATH) ? previousPath : BASE_PATH;
+                    setCurrentPath(safePrev);
+                    setNavigationHistory(newHistory.length ? newHistory : [BASE_PATH]);
+                    historyCountRef.current = Math.max(0, historyCountRef.current - 1);
+                    return;
+                }
+
+                // ここまでで戻れない => 最上階。ダイアログを閉じる。
+                closingViaBackRef.current = true;
+                setOpen(false);
+                historyCountRef.current = Math.max(0, historyCountRef.current - 1);
+            };
+
+            window.addEventListener("popstate", onPopState);
+            return () => {
+                window.removeEventListener("popstate", onPopState);
+            };
+        } else {
+            // ダイアログをUI操作で閉じた場合は、積んだ分だけ戻して履歴を元に戻す
+            if (!closingViaBackRef.current && historyCountRef.current > 0) {
+                try {
+                    window.history.go(-historyCountRef.current);
+                } catch (_) {
+                    /* noop */
+                }
+            }
+            closingViaBackRef.current = false;
+            historyCountRef.current = 0;
+        }
+    }, [isOpen, setOpen]);
 
     // 画像かどうかを判定する関数
     const isImageFile = (fileName) => {
@@ -193,6 +301,8 @@ const FileGridView = ({ onFileSelect, isOpen, setOpen }) => {
     const handleFolderDoubleClick = (folder) => {
         setCurrentPath(folder.path);
         setNavigationHistory((prev) => [...prev, folder.path]);
+        // 階層を降りたら履歴に積む
+        pushHistory({ reason: "enter-folder", path: folder.path, preview: false });
     };
 
     // ファイル/フォルダクリック処理
@@ -210,6 +320,7 @@ const FileGridView = ({ onFileSelect, isOpen, setOpen }) => {
         if (!path.startsWith(BASE_PATH)) return;
         setCurrentPath(path);
         setNavigationHistory((prev) => [...prev, path]);
+        pushHistory({ reason: "breadcrumb", path, preview: false });
     };
 
     // 戻るボタン処理
@@ -361,12 +472,16 @@ const FileGridView = ({ onFileSelect, isOpen, setOpen }) => {
                             <div
                                 key={`file-${index}`}
                                 className={`
-                                    flex flex-col items-center p-3 rounded-lg border-2 cursor-pointer select-none
-                                    transition-all duration-200 hover:bg-accent hover:border-primary/50
-                                    ${selectedFileState?.path === file.path ? "bg-primary/10 border-primary" : "border-transparent hover:border-border"}
+                                    flex flex-col items-center p-3 rounded-lg border-1 cursor-pointer select-none
+                                    transition-all duration-200 hover:border-primary/50
+                                    ${selectedFileState?.path !== file.path ? "border-transparent hover:border-border" : "bg-primary/5 border-primary"}
                                 `}
                                 onClick={() => handleItemClick(file)}
-                                onDoubleClick={() => setPreviewUrl(`${process.env.NEXT_PUBLIC_MIEP_URL}${file.path}`)}
+                                onDoubleClick={() => {
+                                    const url = `${process.env.NEXT_PUBLIC_MIEP_URL}${file.path}`;
+                                    setPreviewUrl(url);
+                                    pushHistory({ reason: "open-preview", path: currentPath, preview: true });
+                                }}
                             >
                                 <div className="mb-2 pointer-events-none">
                                     <FileIcon fileName={file.name} filePath={file.path} />
@@ -395,6 +510,7 @@ const FileGridView = ({ onFileSelect, isOpen, setOpen }) => {
                                     const miepUrl = process.env.NEXT_PUBLIC_MIEP_URL;
                                     const absoluteUrl = `${miepUrl.replace(/\/$/, "")}${selectedFileState.path.startsWith("/") ? selectedFileState.path : "/" + selectedFileState.path}`;
                                     setPreviewUrl(absoluteUrl);
+                                    pushHistory({ reason: "open-preview", path: currentPath, preview: true });
                                 }}
                                 disabled={!isImageFile(selectedFileState.name)}
                             >
@@ -415,7 +531,15 @@ const FileGridView = ({ onFileSelect, isOpen, setOpen }) => {
                         </div>
                     )}
                 </div>
-                <Dialog open={!!previewUrl} onOpenChange={() => setPreviewUrl(null)}>
+                <Dialog
+                    open={!!previewUrl}
+                    onOpenChange={(open) => {
+                        if (!open) {
+                            // 手動で閉じた場合は履歴も1つ戻す
+                            closePreview(true);
+                        }
+                    }}
+                >
                     <DialogContent className="w-[60vw] h-[60vh] flex flex-col p-0">
                         <DialogTitle className="p-4 border-b">ファイルプレビュー</DialogTitle>
                         <div className="flex-1 flex items-center justify-center">
